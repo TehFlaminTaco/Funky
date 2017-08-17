@@ -18,6 +18,8 @@ parse.Expression = function(exp, scope){
 		return parse.Var(exp, scope).getter()
 	if(typ == "call")
 		return parse.Call(exp,scope)
+	if(typ == "unaryarithmatic")
+		return parse.UnaryArithmatic(exp, scope);
 	if(typ == "arithmatic")
 		return parse.Arithmatic(exp, scope);
 	if(typ == "function_builder")
@@ -74,6 +76,18 @@ parse.Arithmatic.ge = (a,b)=>a>=b;
 parse.Arithmatic.gt = (a,b)=>a>b;
 parse.Arithmatic.eq = (a,b)=>a==b;
 parse.Arithmatic.ne = (a,b)=>a!=b;
+
+parse.UnaryArithmatic = function(arith, scope){
+	var l = arith.data[1].items[0];
+	l = parse.Expression(l, scope);
+	var func = parse.Arithmatic[arith.data[0].items[0].data[0].name]
+	if(!func)
+		throw new Error("Unknown operator: "+arith.data[0].items[0].data[0].name)
+	return func(l);
+}
+parse.Arithmatic.not = a=>!a;
+parse.Arithmatic.len = a=>a.length;
+parse.Arithmatic.bitnot = a=>~a;
 
 parse.Constant = function(cons, scope){
 	cons = cons.data[0].items[0];
