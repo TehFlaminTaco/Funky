@@ -28,6 +28,8 @@ parse.Expression = function(exp, scope){
 		return parse.ForLoop(exp, scope);
 	if(typ == "ifblock")
 		return parse.IfBlock(exp, scope);
+	if(typ == "whileblock")
+		return parse.WhileBlock(exp, scope);
 	if(typ == "crementor")
 		return parse.Crementor(exp, scope);
 
@@ -271,6 +273,19 @@ parse.IfBlock = function(ifb, scope){
 			}else{
 				parse.Expression(todo, subScope);
 			}
+		}
+	}
+}
+
+parse.WhileBlock = function(ifb, scope){
+	var subScope = objects.newScope(scope);
+	var exp = ifb.data[1].items[0];
+	var todo = ifb.data[2].items[0];
+	while(parse.Expression(exp, subScope)){
+		if(todo.name == "block"){
+			parse.Program(todo, subScope)
+		}else{
+			parse.Expression(todo, subScope);
 		}
 	}
 }
