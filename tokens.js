@@ -4,33 +4,36 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "forloop | ifblock | whileblock | function_builder | ternary | call | unaryarithmatic | arithmatic | assignment | crementor | paranexp | constant | var",
+    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | ternary | call | unaryarithmatic | arithmatic | assignment | crementor | is | paranexp | constant | var",
+    "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
     "stringconstant": " '\"[^\"]*?\"' | \"'[^']*?'\" | '`[^`]*?`' ",
     "tableconstant": "'\\{' tablefill* '\\}'",
-    "tablefill": "expression ','?",
+    "tablefill": "assignment ','? | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "var '=' expression",
     "crementor": "var '\\+\\+' | '\\+\\+' var | var '--' | '--' var",
     "call": "expression: '\\(' call_1* '\\)'",
     "call_1": "expression ','?",
-    "var": "expression: index | 'local'? '[a-zA-Z_]\\w*'",
+    "var": "expression: index | local? '[a-zA-Z_]\\w*'",
+    "local": "'local' | 'var'",
     "index": "'\\[' expression '\\]' | '\\.' '[a-zA-Z_]\\w*'",
-    "function_builder": "function var? arg_list function_body | function var function_body | arg_list '=>' function_body | var '=>' function_body",
+    "function_builder": "function var? arg_list exporblock | function var exporblock | arg_list '=>' exporblock | var '=>' exporblock",
     "function": "'func' 'tion'?",
     "arg_list": "'\\(' arg_fill* '\\)'",
-    "function_body": "block | expression",
     "arg_fill": "assignment ','? | var ','?",
-    "forloop": "'for' '\\('? program_1{,3} '\\)'? block",
-    "ifblock": "'if' expression block elif? | 'if' expression expression elif?",
-    "elif": "'else' block | 'else' expression",
-    "whileblock": "'while' expression block | 'while' expression expression",
+    "forloop": "'for' var? 'in' expression exporblock | 'for' '\\('? program_1{,3} '\\)'? exporblock",
+    "ifblock": "'if' expression exporblock elif?",
+    "elif": "'else' exporblock",
+    "whileblock": "'while' expression exporblock",
+    "whenblock": "'when' expression exporblock",
     "ternary": "expression: '\\?' expression elset?",
     "elset": "':' expression",
+    "is": "var 'is' '\\*' | var 'is' expression",
     "arithmatic": "expression: operator expression",
     "unaryarithmatic": "unoperator expression",
-    "operator": "add | sub | mult | div | intdiv | pow | mod | and | or | bitor | bitand | bitxor | le | lt | ge | gt | eq | ne",
+    "operator": "add | sub | mult | div | intdiv | pow | mod | and | or | bitor | bitand | bitxor | bitshiftl | bitshiftr | le | lt | ge | gt | eq | ne",
     "add": "'\\+'",
     "sub": "'-'",
     "mult": "'\\*'",
@@ -43,6 +46,8 @@ module.exports={
     "bitor": "'\\|'",
     "bitand": "'&'",
     "bitxor": "'\\^'",
+    "bitshiftl": "'<<'",
+    "bitshiftr": "'>>'",
     "lt": "'<'",
     "le": "'<='",
     "gt": "'>'",
@@ -163,6 +168,17 @@ module.exports={
             1
           ],
           "type": "token",
+          "text": "whenblock"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
           "text": "function_builder"
         }
       ],
@@ -240,6 +256,17 @@ module.exports={
             1
           ],
           "type": "token",
+          "text": "is"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
           "text": "paranexp"
         }
       ],
@@ -263,6 +290,30 @@ module.exports={
           ],
           "type": "token",
           "text": "var"
+        }
+      ]
+    ],
+    "exporblock": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "block"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
         }
       ]
     ],
@@ -381,6 +432,26 @@ module.exports={
       ]
     ],
     "tablefill": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "assignment"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "regex",
+          "text": ","
+        }
+      ],
       [
         {
           "prefix": false,
@@ -636,7 +707,7 @@ module.exports={
             0,
             1
           ],
-          "type": "regex",
+          "type": "token",
           "text": "local"
         },
         {
@@ -647,6 +718,30 @@ module.exports={
           ],
           "type": "regex",
           "text": "[a-zA-Z_]\\w*"
+        }
+      ]
+    ],
+    "local": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "local"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "var"
         }
       ]
     ],
@@ -737,7 +832,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "function_body"
+          "text": "exporblock"
         }
       ],
       [
@@ -766,7 +861,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "function_body"
+          "text": "exporblock"
         }
       ],
       [
@@ -795,7 +890,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "function_body"
+          "text": "exporblock"
         }
       ],
       [
@@ -824,7 +919,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "function_body"
+          "text": "exporblock"
         }
       ]
     ],
@@ -878,30 +973,6 @@ module.exports={
           ],
           "type": "regex",
           "text": "\\)"
-        }
-      ]
-    ],
-    "function_body": [
-      [
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "block"
-        }
-      ],
-      [
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
         }
       ]
     ],
@@ -964,6 +1035,53 @@ module.exports={
             0,
             1
           ],
+          "type": "token",
+          "text": "var"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "in"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "exporblock"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "for"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
           "type": "regex",
           "text": "\\("
         },
@@ -992,7 +1110,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "block"
+          "text": "exporblock"
         }
       ]
     ],
@@ -1023,45 +1141,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "block"
-        },
-        {
-          "prefix": false,
-          "count": [
-            0,
-            1
-          ],
-          "type": "token",
-          "text": "elif"
-        }
-      ],
-      [
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "regex",
-          "text": "if"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
+          "text": "exporblock"
         },
         {
           "prefix": false,
@@ -1092,27 +1172,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "block"
-        }
-      ],
-      [
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "regex",
-          "text": "else"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
+          "text": "exporblock"
         }
       ]
     ],
@@ -1143,9 +1203,11 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "block"
+          "text": "exporblock"
         }
-      ],
+      ]
+    ],
+    "whenblock": [
       [
         {
           "prefix": false,
@@ -1154,7 +1216,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "while"
+          "text": "when"
         },
         {
           "prefix": false,
@@ -1172,7 +1234,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "expression"
+          "text": "exporblock"
         }
       ]
     ],
@@ -1226,6 +1288,66 @@ module.exports={
           ],
           "type": "regex",
           "text": ":"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        }
+      ]
+    ],
+    "is": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "var"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "is"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "\\*"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "var"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "is"
         },
         {
           "prefix": false,
@@ -1422,6 +1544,28 @@ module.exports={
           ],
           "type": "token",
           "text": "bitxor"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "bitshiftl"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "bitshiftr"
         }
       ],
       [
@@ -1644,6 +1788,32 @@ module.exports={
           ],
           "type": "regex",
           "text": "\\^"
+        }
+      ]
+    ],
+    "bitshiftl": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "<<"
+        }
+      ]
+    ],
+    "bitshiftr": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": ">>"
         }
       ]
     ],
