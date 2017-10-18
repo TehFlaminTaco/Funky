@@ -12,8 +12,8 @@ module.exports={
     "tableconstant": "'\\{' tablefill* '\\}'",
     "tablefill": "assignment ','? | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
-    "assignment": "var '=' expression",
-    "crementor": "var '\\+\\+' | '\\+\\+' var | var '--' | '--' var",
+    "assignment": "expression: '=' expression",
+    "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
     "call": "expression: '\\(' call_1* '\\)'",
     "call_1": "expression ','?",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
@@ -507,13 +507,13 @@ module.exports={
     "assignment": [
       [
         {
-          "prefix": false,
+          "prefix": true,
           "count": [
             1,
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         },
         {
           "prefix": false,
@@ -538,13 +538,13 @@ module.exports={
     "crementor": [
       [
         {
-          "prefix": false,
+          "prefix": true,
           "count": [
             1,
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         },
         {
           "prefix": false,
@@ -573,18 +573,18 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         }
       ],
       [
         {
-          "prefix": false,
+          "prefix": true,
           "count": [
             1,
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         },
         {
           "prefix": false,
@@ -613,7 +613,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         }
       ]
     ],
@@ -1972,6 +1972,119 @@ module.exports={
   },
   "prefixes": {
     "expression": {
+      "assignment": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "="
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          }
+        ]
+      ],
+      "crementor": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "\\+\\+"
+          }
+        ],
+        [
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "\\+\\+"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          }
+        ],
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "--"
+          }
+        ],
+        [
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "--"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          }
+        ]
+      ],
       "call": [
         [
           {

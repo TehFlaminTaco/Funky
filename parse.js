@@ -130,10 +130,11 @@ parse.Constant = function(cons, scope){
 		var curIndex = 0;
 		for(var i=0; i < toAppend.length; i++){
 			var this_entry = toAppend[i].data[0].items[0];
-			if(this_entry.name == "expression"){
+			if(this_entry.data[0].name != "assignment"){
 				t.vars[curIndex++] = parse.Expression(this_entry, scope)
 			}else{
-				var v = this_entry.data[0].items[0];
+				this_entry = this_entry.data[0].items[0]
+				var v = this_entry.data[0].items[0].data[0].items[0];
 				var val = parse.Expression(this_entry.data[2].items[0], scope);
 				t.vars[v.data[1].items[0]] = val;
 			}
@@ -145,6 +146,9 @@ parse.Constant = function(cons, scope){
 
 parse.Var = function(v, scope){
 	var dat = v;
+	if(dat.name == "expression"){ // Generic fix for me fully reworking the tokenizer.
+		dat = dat.data[0].items[0]
+	}
 	var t = dat.data[0].name;
 	if(t == "local"){
 		var useLocal = !!dat.data[0].count;
@@ -355,8 +359,7 @@ parse.ForLoop = function(forloop, scope){
 		if(exprs.length >= 1)
 			parse.Expression(exprs[0].data[0].items[0], subScope);
 		while(exprs.length >= 2?parse.Expression(exprs[1].data[0].items[0], subScope):true){
-
-			lastOut = parse.ExpBlock(todo, scope);
+			lastOut = parse.ExpBlock(todo, subScope);
 
 			if(exprs.length >= 3)
 				parse.Expression(exprs[2].data[0].items[0], subScope);
@@ -405,8 +408,8 @@ parse.WhileBlock = function(ifb, scope){
 parse.Crementor = function(cre, scope){
 	var v;
 	var t;
-	if(cre.data[0].name == "var"){
-		v = parse.Var(cre.data[0].items[0], scope);
+	if(cre.data[0].name == "expression"){
+		v = parse.Var(cre.data[0].items[0].data[0].items[0], scope);
 		t = cre.data[1].name=='\\+\\+' ? 1 : -1;
 		var curVal = v.getter();
 		if(curVal == undefined)
@@ -414,7 +417,7 @@ parse.Crementor = function(cre, scope){
 		v.setter(curVal+t);
 		return curVal;
 	}else{
-		v = parse.Var(cre.data[1].items[0], scope);
+		v = parse.Var(cre.data[1].items[0].data[0].items[0], scope);
 		t = cre.data[0].name=='\\+\\+' ? 1 : -1;
 		var curVal = v.getter();
 		if(curVal == undefined)

@@ -108,76 +108,92 @@ if(!tokens.valid || !tokens.compiled){
 }
 
 
-var matchToken = function(tokenname, str, i, as_prefix){
+var matchToken = function(tokenname, str, oldToken, i){
+	i = (i || 0)+1;
+	if(i >= 5000)
+		throw new Error("Surpassed Recursion Limit.");
 	var token = tokens.compiled[tokenname];
-	i = (i||0)+1;
-	if(i >= 30)
-		throw new Error("Surpassed Recursion Limit.")
 	for(var option_id = 0; option_id < token.length; option_id++){
+		var oToken = oldToken
 		var option = token[option_id];
-		var option_str = str;
-		var match = [];
-		var needtousepref = !!as_prefix
+		var built = [];
 		var success = true;
+		var sub_str = str;
+		var usedpref = false;
 		for(var sub_id = 0; sub_id < option.length; sub_id++){
-			var to_match = option[sub_id]
-			var max_matches = to_match.count[1];
+			sub_str = sub_str.replace(/^\s*/, "");
+			// continue moves to the next token, break moves to the next option.
+			// default behaviour should be to return false...
 			var this_match = [];
-			option_str = option_str.replace(/^\s*/,"");
-			while(max_matches != 0){
-				if(to_match.prefix){
-					if(as_prefix){
-						this_match.push(as_prefix)
-						needtousepref = false
-					}
-					break
-				}else if(to_match.type == "token"){
-					var subMatch = matchToken(to_match.text, option_str, i)
-					if(subMatch){
-						option_str = subMatch.remainder
-						this_match.push(subMatch)
+			var subtoken = option[sub_id];
+			var typ = subtoken.type;
+			var count = subtoken.count;
+			var text = subtoken.text;
+			var prefix = subtoken.prefix;
+			var maxMatches = count[1];
+			if(prefix){
+				if(!oToken){
+					success = false;
+					break;
+				}
+				if(!oToken.name){
+					success = false;
+					break;
+				}
+				if(oToken.name != text){
+					success = false;
+					break;
+				}
+				this_match.push(oToken);
+				usedpref = true;
+				oToken = false;
+			}else if(typ == "token"){
+				while(maxMatches!=0){
+					var under_match = matchToken(text, sub_str, oToken, i);
+					if(under_match){
+						sub_str = under_match.remainder;
+						this_match.push(under_match)
+						usedpref = usedpref || under_match.usedpref;
+						maxMatches--;
 					}else{
 						break;
 					}
-				}else if(to_match.type == "regex"){
-					var str_match = option_str.match(new RegExp("^"+to_match.text));
-	
+				}
+			}else{
+				while(maxMatches!=0){
+					var str_match = sub_str.match(new RegExp("^"+text));
 					if(str_match){
-						option_str = option_str.replace(new RegExp("^"+to_match.text),"");
-						this_match.push(str_match[0])
+						sub_str = sub_str.replace(new RegExp("^"+text), "");
+						this_match.push(str_match[0]);
+						maxMatches--;
 					}else{
-						break
+						break;
 					}
 				}
-				max_matches --
 			}
-			if(this_match.length < to_match.count[0] || (to_match.count[1]!=-1 && this_match.length > to_match.count[1])){
+			oToken = false;
+			if(this_match.length < count[0] || (count[1]!=-1 && this_match.length > count[1])){
 				success = false;
 				break;
 			}
-			match.push({name: to_match.text, count: this_match.length, items: this_match})
-		}
-		if(needtousepref){
-			success = false;
+			built.push({name: text, count: this_match.length, items: this_match});
 		}
 		if(success){
-			var prfxes = tokens.prefixes[tokenname]
-			if(prfxes){
-				var this_tokn = {data: match, name: tokenname, remainder: option_str}
-				var shortest = this_tokn
-				var shortlen = option_str.length
-				for (var name in prfxes){
-					var contestent = matchToken(name, option_str, i, this_tokn)
-					if(contestent && contestent.remainder.length < shortlen){
-						shortlen = contestent.remainder.length
-						shortest = {data: [{name: name, count: 1, items: [contestent]}], name:tokenname, remainder: contestent.remainder}
-					}
-				}
-				return shortest
+			var newToken = {data: built, name: tokenname, remainder: sub_str};
+			if(usedpref)
+				newToken.usedpref = true
+			
+			if(!sub_str)
+				return newToken
+			var otherMtch = matchToken(tokenname, sub_str, newToken, i)
+			if(otherMtch.usedpref){
+				otherMtch.usedpref = usedpref;
+				return otherMtch;
 			}
-			return {data: match, name: tokenname, remainder: option_str}
+			return newToken;
 		}
 	}
+	return false;
 }
 // console.log(JSON.stringify(matchToken("program", "a[2] = 3"),null,2))
 
