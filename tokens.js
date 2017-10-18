@@ -1969,5 +1969,162 @@ module.exports={
         }
       ]
     ]
+  },
+  "prefixes": {
+    "expression": {
+      "call": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "\\("
+          },
+          {
+            "prefix": false,
+            "count": [
+              0,
+              -1
+            ],
+            "type": "token",
+            "text": "call_1"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "\\)"
+          }
+        ]
+      ],
+      "var": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "index"
+          }
+        ],
+        [
+          {
+            "prefix": false,
+            "count": [
+              0,
+              1
+            ],
+            "type": "token",
+            "text": "local"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "[a-zA-Z_]\\w*"
+          }
+        ]
+      ],
+      "ternary": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "\\?"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              0,
+              1
+            ],
+            "type": "token",
+            "text": "elset"
+          }
+        ]
+      ],
+      "arithmatic": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "operator"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          }
+        ]
+      ]
+    }
   }
 }
