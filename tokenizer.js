@@ -111,7 +111,7 @@ if(!tokens.valid || !tokens.compiled){
 var matchToken = function(tokenname, str, i, as_prefix){
 	var token = tokens.compiled[tokenname];
 	i = (i||0)+1;
-	if(i >= 30)
+	if(i >= 300)
 		throw new Error("Surpassed Recursion Limit.")
 	for(var option_id = 0; option_id < token.length; option_id++){
 		var option = token[option_id];
@@ -162,8 +162,8 @@ var matchToken = function(tokenname, str, i, as_prefix){
 		}
 		if(success){
 			var prfxes = tokens.prefixes[tokenname]
+			var this_tokn = {data: match, name: tokenname, remainder: option_str, text: str.substr(0, str.length - option_str.length)}
 			if(prfxes){
-				var this_tokn = {data: match, name: tokenname, remainder: option_str}
 				while(true){
 					var shortest = this_tokn
 					var shortlen = option_str.length
@@ -171,7 +171,7 @@ var matchToken = function(tokenname, str, i, as_prefix){
 						var contestent = matchToken(name, option_str, i, this_tokn)
 						if(contestent && contestent.remainder.length < shortlen){
 							shortlen = contestent.remainder.length
-							shortest = {data: [{name: name, count: 1, items: [contestent]}], name:tokenname, remainder: contestent.remainder}
+							shortest = {data: [{name: name, count: 1, items: [contestent]}], name:tokenname, remainder: contestent.remainder, text: str.substr(0, str.length - contestent.remainder.length)}
 						}
 					}
 					option_str = shortest.remainder
@@ -180,7 +180,7 @@ var matchToken = function(tokenname, str, i, as_prefix){
 					this_tokn = shortest
 				}
 			}
-			return {data: match, name: tokenname, remainder: option_str}
+			return this_tokn
 		}
 	}
 }

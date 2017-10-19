@@ -28,7 +28,7 @@ module.exports={
     "elif": "'else' exporblock",
     "whileblock": "'while' expression exporblock",
     "whenblock": "'when' expression exporblock",
-    "ternary": "expression: '\\?' expression elset?",
+    "ternary": "expression: '\\?' expression elset",
     "elset": "':' expression",
     "is": "var 'is' '\\*' | var 'is' expression",
     "arithmatic": "expression: operator expression",
@@ -39,13 +39,13 @@ module.exports={
     "mult": "'\\*'",
     "div": "'/'",
     "intdiv": "'//'",
-    "pow": "'\\*\\*'",
+    "pow": "'\\^'",
     "mod": "'\\%'",
     "and": "'and'",
     "or": "'or'",
     "bitor": "'\\|'",
     "bitand": "'&'",
-    "bitxor": "'\\^'",
+    "bitxor": "'~'",
     "bitshiftl": "'<<'",
     "bitshiftr": "'>>'",
     "lt": "'<'",
@@ -839,7 +839,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": ":"
+          "text": "::"
         },
         {
           "prefix": false,
@@ -1326,7 +1326,7 @@ module.exports={
         {
           "prefix": false,
           "count": [
-            0,
+            1,
             1
           ],
           "type": "token",
@@ -2255,7 +2255,7 @@ module.exports={
           {
             "prefix": false,
             "count": [
-              0,
+              1,
               1
             ],
             "type": "token",

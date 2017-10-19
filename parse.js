@@ -273,6 +273,7 @@ parse.Function = function(func, scope){
 	var arglistScope = objects.newScope();
 	var expScope = objects.newScope(scope);
 	expScope.vars = arglistScope.vars
+	var inp_func = func;
 	var func;
 	// Shorthand function. Rather consistent form.
 	if(func.data[0].name == "var" || func.data[0].name == "arg_list"){
@@ -313,6 +314,7 @@ parse.Function = function(func, scope){
 				return out
 			}
 		}
+		func.stringify = inp_func.text;
 		return func;
 
 	// Longhand function, inconsistent form.
@@ -368,6 +370,7 @@ parse.Function = function(func, scope){
 				return out
 			}
 		}
+		func.stringify = inp_func.text;
 		if(named){
 			name.setter(func);
 		}
