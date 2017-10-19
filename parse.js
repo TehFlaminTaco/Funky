@@ -56,11 +56,27 @@ parse.Assignment = function(assign, scope, expscope){
 }
 
 parse.Arithmatic = function(arith, scope){
+	var func = globals.vars.math.getVar(arith.data[1].items[0].data[0].name)
+	if(func == "and"){
+		var l = parse.Expression(arith.data[0].items[1], scope);
+		if(l){
+			return parse.Expression(arith.data[2].items[1], scope);
+		}else{
+			return l
+		}
+	}
+	if(func == "or"){
+		var l = parse.Expression(arith.data[0].items[1], scope);
+		if(l){
+			return l
+		}else{
+			return parse.Expression(arith.data[2].items[1], scope);
+		}
+	}
 	var l = arith.data[0].items[0];
 	var r = arith.data[2].items[0];
 	l = parse.Expression(l, scope);
 	r = parse.Expression(r, scope);
-	var func = globals.vars.math.getVar(arith.data[1].items[0].data[0].name)
 	if(!func)
 		throw new Error("Unknown operator: "+arith.data[1].items[0].data[0].name)
 	if(globals.vars.getMetaFunc(l, "_"+arith.data[1].items[0].data[0].name)){
@@ -197,7 +213,7 @@ parse.Var = function(v, scope){
 	var curry = false;
 	if(ind.data[0].name == "\\."){
 		name = ind.data[1].items[0]
-	}else if(ind.data[0].name == ":"){
+	}else if(ind.data[0].name == "::"){
 		name = ind.data[1].items[0]
 		curry = true;
 	}else{
