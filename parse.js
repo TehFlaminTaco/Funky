@@ -111,8 +111,18 @@ globals.vars.math.vars.not = a=>!a;
 globals.vars.math.vars.len = a=>{
 	if(typeof a == "string")
 		return a.length;
-	if(typeof a == "object")
-		return a.vars?a.vars.length:a.length;
+	if(typeof a == "object"){
+		if(a.vars){
+			var max = -1;
+			for(var name in a.vars){
+				if(typeof(Number(name))=="number")
+					max = Math.max(name, max)
+			}
+			return max+1
+		}else{
+			return a.length
+		}
+	}
 	return a;
 }
 globals.vars.math.vars.bitnot = a=>~a;
@@ -270,14 +280,21 @@ parse.Function = function(func, scope){
 		var toDo = func.data[2].items[0].data[0].items[0];
 		//console.log(toDo);
 		func = function(){
+			var curArguments = (func.scope || expScope).vars.arguments;
+			(func.scope || expScope).vars.arguments = objects.newList()
 			for(var i=0; i < arguments.length; i++){
+				(func.scope || expScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
 			}
 			if(toDo.name == "block"){
-				return parse.Program(toDo, func.scope || expScope)
+				var out = parse.Program(toDo, func.scope || expScope);
+				(func.scope || expScope).vars.arguments = curArguments
+				return out
 			}else{
-				return parse.Expression(toDo, func.scope || expScope);
+				var out = parse.Expression(toDo, func.scope || expScope);
+				(func.scope || expScope).vars.arguments = curArguments
+				return out
 			}
 		}
 		return func;
@@ -318,14 +335,21 @@ parse.Function = function(func, scope){
 		
 		var toDo = action.data[0].items[0];
 		func = function(){
+			var curArguments = (func.scope || expScope).vars.arguments;
+			(func.scope || expScope).vars.arguments = objects.newList()
 			for(var i=0; i < arguments.length; i++){
+				(func.scope || expScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
 			}
 			if(toDo.name == "block"){
-				return parse.Program(toDo, func.scope || expScope)
+				var out = parse.Program(toDo, func.scope || expScope);
+				(func.scope || expScope).vars.arguments = curArguments
+				return out
 			}else{
-				return parse.Expression(toDo, func.scope || expScope);
+				var out = parse.Expression(toDo, func.scope || expScope);
+				(func.scope || expScope).vars.arguments = curArguments
+				return out
 			}
 		}
 		if(named){

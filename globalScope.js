@@ -96,12 +96,30 @@ globals.table.vars.rawGet = function(table, name){
 globals.table.vars.rawSet = function(table, name, val){
 	return table.vars[name] = val;
 }
+globals.table.vars.apply = function(table, fn){
+	var asList = [];
+	for(var s in table.vars){
+		asList[s] = table.vars[s]
+	}
+	return fn[0].apply(undefined, asList)
+}
+globals.table.vars.reverse = function(table){
+	var len = globals.math.vars.len
+	var inplen = len(table)
+	var out = objects.newList()
+	for(var i=inplen-1; i>=0; i--){
+		out.vars[len(out)] = table.vars[i]
+	}
+	return out
+}
 
 globals.defaultMeta = objects.newList();
 globals.defaultMeta.vars.string = objects.newList();
 globals.defaultMeta.vars.string.vars._index = globals.string;
-globals.defaultMeta.vars.string.vars._mod = globals.string.vars.format
+globals.defaultMeta.vars.string.vars._mod = globals.string.vars.format;
 
+globals.defaultMeta.vars.object = objects.newList();
+globals.defaultMeta.vars.object.vars._index = globals.table;
 
 var globalsScope = objects.newScope();
 globalsScope.vars = globals;
