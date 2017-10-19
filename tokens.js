@@ -10,7 +10,7 @@ module.exports={
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
     "stringconstant": " '\"[^\"]*?\"' | \"'[^']*?'\" | '`[^`]*?`' ",
     "tableconstant": "'\\{' tablefill* '\\}'",
-    "tablefill": "assignment ','? | expression ','?",
+    "tablefill": "var '=' expression ','? | constant '=' expression | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
@@ -440,7 +440,25 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "assignment"
+          "text": "var"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "="
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
         },
         {
           "prefix": false,
@@ -450,6 +468,35 @@ module.exports={
           ],
           "type": "regex",
           "text": ","
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "constant"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "="
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
         }
       ],
       [

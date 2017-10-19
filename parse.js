@@ -129,14 +129,21 @@ parse.Constant = function(cons, scope){
 		var toAppend = cons.data[1].items;
 		var curIndex = 0;
 		for(var i=0; i < toAppend.length; i++){
-			var this_entry = toAppend[i].data[0].items[0];
-			if(this_entry.data[0].name != "assignment"){
-				t.vars[curIndex++] = parse.Expression(this_entry, scope)
+			var this_entry = toAppend[i];
+			console.log(this_entry.name)
+			if(this_entry.data[0].items[0].name == "expression"){
+				t.vars[curIndex++] = parse.Expression(this_entry.data[0].items[0], scope)
 			}else{
-				this_entry = this_entry.data[0].items[0]
-				var v = this_entry.data[0].items[0].data[0].items[0];
-				var val = parse.Expression(this_entry.data[2].items[0], scope);
-				t.vars[v.data[1].items[0]] = val;
+				var val = parse.Expression(this_entry.data[2].items[0], scope)
+				var name_tokn = this_entry.data[0].items[0]
+				var name
+				console.log(name_tokn)
+				if(name_tokn.name == "constant"){
+					name = parse.Constant(name_tokn)
+				}else{
+					name = name_tokn.data[1].items[0]
+				}
+				t.vars[name] = val
 			}
 		}
 		return t;
