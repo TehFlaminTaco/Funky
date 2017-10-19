@@ -1,8 +1,8 @@
 const objects = {};
 
 objects.newScope = function(parent){
-	var n = {};
-	n.vars = {};
+	var n = Object.create(null,{});
+	n.vars = Object.create(null,{});
 	n.parent = parent;
 	n.listeners = [];
 	n.getVar = function(name){
@@ -44,9 +44,21 @@ objects.newScope = function(parent){
 	return n;
 }
 
+objects.ListFromObject = function(obj){
+	if(typeof(obj)=="object"){
+		var l = objects.newList();
+		for(var name in obj){
+			l.vars[name] = objects.ListFromObject(obj[name])
+		}
+		return l
+	}else{
+		return obj
+	}
+}
+
 objects.newList = function(contents){
-	var l = {};
-	l.vars = {};
+	var l = Object.create(null,{});
+	l.vars = Object.create(null,{});
 	l.listeners = [];
 	l.getVar = function(name){
 		// Parent behavoir isn't default, but it _is_ supported.
@@ -54,7 +66,7 @@ objects.newList = function(contents){
 			return l.vars[name]
 		else if(!l.parent){
 			var m = objects.getMetaFunc(l, "_index");
-			if(m){
+			if(m && m!=l){
 				if(typeof m == "function")
 					return m(l, name);
 				else
@@ -127,5 +139,7 @@ objects.newEvent = function(scope){
 	}
 	return t;
 }
+
+Function.prototype.toString = function(){return this.stringify || "[internal function]"};
 
 module.exports = objects;
