@@ -326,6 +326,7 @@ parse.Function = function(func, scope){
 		if(named){
 			name.setter(func);
 		}
+		return func
 	}
 }
 
