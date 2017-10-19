@@ -123,21 +123,19 @@ parse.Constant = function(cons, scope){
 	if(constyp == "numberconstant")
 		return Number(cons.data[0].items[0]);
 	if(constyp == "stringconstant")
-		return JSON.parse(cons.data[0].items[0]);
+		return eval(cons.data[0].items[0]);
 	if(constyp == "tableconstant"){
 		var t = objects.newList();
 		var toAppend = cons.data[1].items;
 		var curIndex = 0;
 		for(var i=0; i < toAppend.length; i++){
 			var this_entry = toAppend[i];
-			console.log(this_entry.name)
 			if(this_entry.data[0].items[0].name == "expression"){
 				t.vars[curIndex++] = parse.Expression(this_entry.data[0].items[0], scope)
 			}else{
 				var val = parse.Expression(this_entry.data[2].items[0], scope)
 				var name_tokn = this_entry.data[0].items[0]
 				var name
-				console.log(name_tokn)
 				if(name_tokn.name == "constant"){
 					name = parse.Constant(name_tokn)
 				}else{
