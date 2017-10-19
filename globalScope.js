@@ -85,6 +85,9 @@ globals.string.vars.format.i = s=>Math.floor(Number(s))
 globals.string.vars.format.f = globals.string.vars.format.d = globals.string.vars.format.n = s=>Number(s)
 globals.string.vars.format['%'] = ()=>'%'
 
+globals.string.vars.rep = (s,n)=>s.repeat(n)
+globals.string.vars.reverse = s=>s.split("").reverse().join("")
+
 globals.table = objects.newList();
 globals.table.vars.rawGet = function(table, name){
 	return table.vars[name];

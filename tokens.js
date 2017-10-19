@@ -18,7 +18,7 @@ module.exports={
     "call_1": "expression ','?",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
     "local": "'local' | 'var'",
-    "index": "'\\[' expression '\\]' | '\\.' '[a-zA-Z_]\\w*'",
+    "index": "'\\[' expression '\\]' | '\\.' '[a-zA-Z_]\\w*' | ':' '[a-zA-Z_]\\w*'",
     "function_builder": "function var? arg_list exporblock | function var exporblock | arg_list '=>' exporblock | var '=>' exporblock",
     "function": "'func' 'tion'?",
     "arg_list": "'\\(' arg_fill* '\\)'",
@@ -784,6 +784,26 @@ module.exports={
           ],
           "type": "regex",
           "text": "\\."
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "[a-zA-Z_]\\w*"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": ":"
         },
         {
           "prefix": false,

@@ -87,13 +87,27 @@ objects.newList = function(contents){
 			l.vars[i] = contents[i];
 
 	l.toString = function(){
+		var m = objects.getMetaFunc(l, "_toString")
+		if(m){
+			if(typeof(m)=="function"){
+				return m(l)
+			}else{
+				return m
+			}
+		}
 		if(l.vars.asString){
 			if(typeof l.vars.asString == "function")
 				return l.vars.asString()
 			if(typeof l.vars.asString == "string" || typeof l.vars.asString == "number")
 				return l.vars.asString
 		}
-		return JSON.stringify(l.vars)
+		var s = "{";
+		var sep = "";
+		for(key in l.vars){
+			s += sep + key.toString() + "="+l.vars[key].toString()
+			sep = ","
+		}
+		return s + "}"
 	}
 
 	return l;

@@ -179,19 +179,41 @@ parse.Var = function(v, scope){
 	var rootTab = parse.Expression(dat.data[0].items[0], scope);
 	var ind = dat.data[1].items[0];
 	var name;
+	var curry = false;
 	if(ind.data[0].name == "\\."){
 		name = ind.data[1].items[0]
+	}else if(ind.data[0].name == ":"){
+		name = ind.data[1].items[0]
+		curry = true;
 	}else{
 		name = parse.Expression(ind.data[1].items[0], scope)
 	}
 	if(rootTab){
+		var m = objects.getMetaFunc()
 		if(typeof rootTab != "object" || !rootTab.vars)
 			return {
 				scope: rootTab,
 				getter: function(){
-					if(rootTab.hasOwnProperty(name))
-						return rootTab[name]
-					return undefined
+					var v;
+					if(rootTab.hasOwnProperty(name)){
+						v = rootTab[name];
+					}
+					if(v==undefined){
+						var m = objects.getMetaFunc(rootTab, "_index")
+						if(m){
+							if(typeof(m)=="function"){
+								v = m(rootTab, name)
+							}else{
+								v = m.getVar(name)
+							}
+						}
+					}
+					if(curry){
+						return function(){
+							return v(rootTab, ...arguments)
+						}
+					}
+					return v;
 				},
 				setter: function(val){
 					rootTab[name] = val;
@@ -201,7 +223,13 @@ parse.Var = function(v, scope){
 			return {
 				scope: rootTab,
 				getter: function(){
-					return rootTab.getVar(name);
+					var v = rootTab.getVar(name);
+					if(curry){
+						return function(){
+							return v.apply(rootTab, [rootTab].concat(arguments))
+						}
+					}
+					return v;
 				},
 				setter: function(val){
 					rootTab.setVar(name, val);
