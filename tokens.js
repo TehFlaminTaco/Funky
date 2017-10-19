@@ -8,7 +8,7 @@ module.exports={
     "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
-    "stringconstant": " '\"[^\"]*?\"' | \"'[^']*?'\" | '`[^`]*?`' ",
+    "stringconstant": " '\"([^\\\\\"]|\\\\(.|[^a]))*\"' | \"'([^\\\\']|\\\\(.|[^a]))*'\"",
     "tableconstant": "'\\{' tablefill* '\\}'",
     "tablefill": "var '=' expression ','? | constant '=' expression | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
@@ -374,7 +374,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "\"[^\"]*?\""
+          "text": "\"([^\\\\\"]|\\\\(.|[^a]))*\""
         }
       ],
       [
@@ -385,18 +385,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "'[^']*?'"
-        }
-      ],
-      [
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "regex",
-          "text": "`[^`]*?`"
+          "text": "'([^\\\\']|\\\\(.|[^a]))*'"
         }
       ]
     ],
