@@ -116,7 +116,7 @@ objects.newList = function(contents){
 		var s = "{";
 		var sep = "";
 		for(key in l.vars){
-			s += sep + key.toString() + "="+l.vars[key].toString()
+			s += sep + key.toString() + "="+(l.vars[key]==undefined?"undefined":l.vars[key].toString())
 			sep = ","
 		}
 		return s + "}"
@@ -140,6 +140,16 @@ objects.newEvent = function(scope){
 	return t;
 }
 
-Function.prototype.toString = function(){return this.stringify || "[internal function]"};
+Function.prototype.toString = function(){
+	var m = objects.getMetaFunc(this, "_toString")
+	if(m){
+		if(typeof(m)=="function"){
+			return m(this)
+		}else{
+			return m
+		}
+	}
+	return this.stringify || "[internal function]"
+};
 
 module.exports = objects;

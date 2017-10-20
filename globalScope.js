@@ -10,6 +10,8 @@ globals.print = function(){
 	return a[0];
 }
 
+globals.toString = s=>s.toString()
+
 globals.pairs = function(list){
 	var keys = Object.keys(list.vars);
 	var i = 0;
@@ -80,6 +82,9 @@ globals.getMetaFunc = function(val, name){
 		return globals.defaultMeta.vars[typeof val].vars[name];	
 	}
 }
+
+globals.type = ent => typeof(ent)
+
 objects.getMetaFunc = globals.getMetaFunc;
 
 ///////////////////////////////////////
@@ -170,28 +175,99 @@ string.gmatch = (s, regex)=>{
 globals.table = objects.newList();
 var table = globals.table.vars
 
-table.rawGet = function(table, name){
-	return table.vars[name];
+table.rawGet = function(t, name){
+	return t.vars[name];
 }
 
-table.rawSet = function(table, name, val){
-	return table.vars[name] = val;
+table.rawSet = function(t, name, val){
+	return t.vars[name] = val;
 }
-table.apply = function(table, fn){
+table.apply = function(t, fn){
 	var asList = [];
-	for(var s in table.vars){
-		asList[s] = table.vars[s]
+	for(var s in t.vars){
+		asList[s] = t.vars[s]
 	}
 	return fn[0].apply(undefined, asList)
 }
-table.reverse = function(table){
+table.reverse = function(t){
 	var len = globals.math.vars.len
-	var inplen = len(table)
+	var inplen = len(t)
 	var out = objects.newList()
 	for(var i=inplen-1; i>=0; i--){
-		out.vars[len(out)] = table.vars[i]
+		out.vars[len(out)] = t.vars[i]
 	}
 	return out
+}
+table.insert = function(t, index, value){
+	var ln = math.len(t)
+	if(value==undefined){
+		value = index
+		index = ln
+	}
+	for(var i=ln; i>index; i--){
+		t.vars[i] = t.vars[i-1]
+	}
+	t.vars[index] = value;
+	return t;
+}
+table.push = table.insert
+table.remove = function(t, index){
+	var ln = math.len(t)
+	if(index == undefined){
+		index = ln-1
+	}
+	var out = t.vars[index]
+	for(var i=index; i<ln; i++){
+		t.vars[i] = t.vars[i+1]
+	}
+	delete t.vars[ln-1]
+	return out
+}
+table.pop = table.remove
+
+table.len = math.len
+table.rotate = (t, n)=>{
+	n = n || 1;
+	while(n>0){
+		table.insert(t,0,table.pop(t));
+		n--;
+	}
+	while(n<0){
+		table.insert(t,table.remove(t,0));
+		n++;
+	}
+	return t;
+}
+
+table.add = function(t,b){
+	if(typeof(b)!="object"){
+		var nB = objects.newList();
+		nB.vars[0] = b;
+		b = nB
+	}
+	for(var i=0; i < table.len(b); i++){
+		table.push(b.vars[i]);
+	}
+	return t;
+}
+
+table.merge = function(t,b){
+	for(var name in b.vars){
+		t.vars[name] = b.vars[name]
+	}
+	return t;
+}
+
+table.clone = function(t){
+	var newT = objects.newList()
+	for(var name in t.vars){
+		if(typeof(t.vars[name])=="object"){
+			newT.vars[name] = table.clone(t.vars[name]);
+		}else{
+			newT.vars[name] = t.vars[name]
+		}
+	}
+	return newT
 }
 
 globals.defaultMeta = objects.newList();
@@ -201,6 +277,9 @@ globals.defaultMeta.vars.string.vars._mod = string.format;
 
 globals.defaultMeta.vars.object = objects.newList();
 globals.defaultMeta.vars.object.vars._index = globals.table;
+
+globals.defaultMeta.vars.function = objects.newList();
+globals.defaultMeta.vars.number = objects.newList();
 
 var globalsScope = objects.newScope();
 globalsScope.vars = globals;

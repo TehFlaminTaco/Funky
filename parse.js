@@ -257,7 +257,11 @@ parse.Var = function(v, scope){
 					var v = rootTab.getVar(name);
 					if(curry){
 						return function(){
-							return v.apply(rootTab, [rootTab].concat(arguments))
+							var argsAsList = [];
+							for(var argn in arguments){
+								argsAsList[argn] = arguments[argn];
+							}
+							return v.apply(rootTab, [rootTab].concat(argsAsList))
 						}
 					}
 					return v;
@@ -272,7 +276,6 @@ parse.Var = function(v, scope){
 parse.Function = function(func, scope){
 	var arglistScope = objects.newScope();
 	var expScope = objects.newScope(scope);
-	expScope.vars = arglistScope.vars
 	var inp_func = func;
 	var func;
 	// Shorthand function. Rather consistent form.
@@ -297,20 +300,24 @@ parse.Function = function(func, scope){
 		var toDo = func.data[2].items[0].data[0].items[0];
 		//console.log(toDo);
 		func = function(){
-			var curArguments = (func.scope || expScope).vars.arguments;
-			(func.scope || expScope).vars.arguments = objects.newList()
+			var tmpScope = objects.newScope(expScope);
+			var curArguments = (func.scope || tmpScope).vars.arguments;
+			(func.scope || tmpScope).vars.arguments = objects.newList()
 			for(var i=0; i < arguments.length; i++){
-				(func.scope || expScope).vars.arguments.vars[i] = arguments[i]
+				(func.scope || tmpScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
 			}
+			for(var name in arglistScope.vars){
+				tmpScope.vars[name] = arglistScope.vars[name]
+			}
 			if(toDo.name == "block"){
-				var out = parse.Program(toDo, func.scope || expScope);
-				(func.scope || expScope).vars.arguments = curArguments
+				var out = parse.Program(toDo, func.scope || tmpScope);
+				(func.scope || tmpScope).vars.arguments = curArguments
 				return out
 			}else{
-				var out = parse.Expression(toDo, func.scope || expScope);
-				(func.scope || expScope).vars.arguments = curArguments
+				var out = parse.Expression(toDo, func.scope || tmpScope);
+				(func.scope || tmpScope).vars.arguments = curArguments
 				return out
 			}
 		}
@@ -353,20 +360,24 @@ parse.Function = function(func, scope){
 		
 		var toDo = action.data[0].items[0];
 		func = function(){
-			var curArguments = (func.scope || expScope).vars.arguments;
-			(func.scope || expScope).vars.arguments = objects.newList()
+			var tmpScope = objects.newScope(expScope);
+			var curArguments = (func.scope || tmpScope).vars.arguments;
+			(func.scope || tmpScope).vars.arguments = objects.newList()
 			for(var i=0; i < arguments.length; i++){
-				(func.scope || expScope).vars.arguments.vars[i] = arguments[i]
+				(func.scope || tmpScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
 			}
+			for(var name in arglistScope.vars){
+				tmpScope.vars[name] = arglistScope.vars[name]
+			}
 			if(toDo.name == "block"){
-				var out = parse.Program(toDo, func.scope || expScope);
-				(func.scope || expScope).vars.arguments = curArguments
+				var out = parse.Program(toDo, func.scope || tmpScope);
+				(func.scope || tmpScope).vars.arguments = curArguments
 				return out
 			}else{
-				var out = parse.Expression(toDo, func.scope || expScope);
-				(func.scope || expScope).vars.arguments = curArguments
+				var out = parse.Expression(toDo, func.scope || tmpScope);
+				(func.scope || tmpScope).vars.arguments = curArguments
 				return out
 			}
 		}
@@ -454,11 +465,7 @@ parse.IfBlock = function(ifb, scope){
 	}else{
 		if(ifb.data[3].count > 0){
 			todo = ifb.data[3].items[0].data[1].items[0];
-			if(todo.name == "block"){
-				return parse.Program(todo, subScope)
-			}else{
-				return parse.Expression(todo, subScope);
-			}
+			return parse.ExpBlock(todo, subScope);
 		}
 	}
 }
