@@ -520,7 +520,7 @@ parse.Call = function(call, scope){
 		parsedArgs.push(val);
 	}
 	if(typeof globals.vars.getMetaFunc(toCall, "_call") == "function"){
-		globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));
+		return globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));
 	}
 	if(typeof toCall == "function")
 		return toCall.apply(toCall, parsedArgs);

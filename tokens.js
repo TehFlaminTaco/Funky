@@ -1765,7 +1765,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "\\*\\*"
+          "text": "\\^"
         }
       ]
     ],
@@ -1843,7 +1843,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "\\^"
+          "text": "~"
         }
       ]
     ],
