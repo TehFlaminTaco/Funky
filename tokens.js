@@ -12,7 +12,7 @@ module.exports={
     "tableconstant": "'\\{' tablefill* '\\}'",
     "tablefill": "var '=' expression ','? | constant '=' expression | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
-    "assignment": "expression: '=' expression",
+    "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
     "call": "expression: '\\(' call_1* '\\)'",
     "call_1": "expression ','?",
@@ -550,6 +550,15 @@ module.exports={
           ],
           "type": "token",
           "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "token",
+          "text": "operator"
         },
         {
           "prefix": false,
@@ -2038,6 +2047,15 @@ module.exports={
             ],
             "type": "token",
             "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              0,
+              1
+            ],
+            "type": "token",
+            "text": "operator"
           },
           {
             "prefix": false,

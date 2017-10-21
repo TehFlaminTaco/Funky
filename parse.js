@@ -49,45 +49,55 @@ parse.Expression = function(exp, scope){
 parse.Assignment = function(assign, scope, expscope){
 	var dat = assign.data;
 	var v = parse.Var(dat[0].items[0], scope);
-	var val = parse.Expression(dat[2].items[0], expscope || scope);
-	if(v)
+	var val = parse.Expression(dat[3].items[0], expscope || scope);
+	if(v){
+		if(dat[1].count){
+			var op = dat[1].items[0].data[0].items[0].name
+			val = parse.Operator(op, v.getter(), val);
+		}
 		v.setter(val);
+	}
 	return val;
 }
 
+parse.Operator = function(name, l, r){
+	var func = globals.vars.math.getVar(name);
+	if(!func)
+		throw new Error("Unknown operator: "+name)
+	if(globals.vars.getMetaFunc(l, "_"+name)){
+		var v = globals.vars.getMetaFunc(l, "_"+name)(l, r)
+		return v===undefined ? func(l,r) : v
+	}
+	if(globals.vars.getMetaFunc(r, "_"+name)){
+		var v = globals.vars.getMetaFunc(r, "_"+name)(l, r)
+		return v===undefined ? func(l,r) : v
+	}
+	return func(l, r);
+}
+
 parse.Arithmatic = function(arith, scope){
-	var func = globals.vars.math.getVar(arith.data[1].items[0].data[0].name)
-	if(func == "and"){
-		var l = parse.Expression(arith.data[0].items[1], scope);
+	var name = arith.data[1].items[0].data[0].name;
+	if(name == "and"){
+		var l = parse.Expression(arith.data[0].items[0], scope);
 		if(l){
-			return parse.Expression(arith.data[2].items[1], scope);
+			return parse.Expression(arith.data[2].items[0], scope);
 		}else{
 			return l
 		}
 	}
-	if(func == "or"){
-		var l = parse.Expression(arith.data[0].items[1], scope);
+	if(name == "or"){
+		var l = parse.Expression(arith.data[0].items[0], scope);
 		if(l){
 			return l
 		}else{
-			return parse.Expression(arith.data[2].items[1], scope);
+			return parse.Expression(arith.data[2].items[0], scope);
 		}
 	}
 	var l = arith.data[0].items[0];
 	var r = arith.data[2].items[0];
 	l = parse.Expression(l, scope);
 	r = parse.Expression(r, scope);
-	if(!func)
-		throw new Error("Unknown operator: "+arith.data[1].items[0].data[0].name)
-	if(globals.vars.getMetaFunc(l, "_"+arith.data[1].items[0].data[0].name)){
-		var v = globals.vars.getMetaFunc(l, "_"+arith.data[1].items[0].data[0].name)(l, r)
-		return v===undefined ? func(l,r) : v
-	}
-	if(globals.vars.getMetaFunc(r, "_"+arith.data[1].items[0].data[0].name)){
-		var v = globals.vars.getMetaFunc(r, "_"+arith.data[1].items[0].data[0].name)(l, r)
-		return v===undefined ? func(l,r) : v
-	}
-	return func(l, r);
+	return parse.Operator(name, l, r)
 }
 
 globals.vars.math.vars.add = (a,b)=>a+b;
