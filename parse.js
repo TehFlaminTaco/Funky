@@ -318,6 +318,9 @@ parse.Function = function(func, scope){
 				if(vList[i])
 					vList[i].setter(arguments[i])
 			}
+			for(var i=arguments.length+1; i<vList.length; i++){
+				vList[i].setter(null)
+			}
 			for(var name in arglistScope.vars){
 				tmpScope.vars[name] = arglistScope.vars[name]
 			}
@@ -377,6 +380,9 @@ parse.Function = function(func, scope){
 				(func.scope || tmpScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
+			}
+			for(var i=arguments.length; i<vList.length; i++){
+				vList[i].setter(null)
 			}
 			for(var name in arglistScope.vars){
 				tmpScope.vars[name] = arglistScope.vars[name]

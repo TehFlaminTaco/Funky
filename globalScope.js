@@ -104,7 +104,7 @@ math.ceil  = (a,b)=>Math.ceil (a*10**(b||0))/10**(b||0)
 math.max = Math.max
 math.min = Math.min
 math.clamp = (a,b,c)=>[a,b,c].sort()[1]
-math.log = (a,b)=>b?(Math.log(b)/Math.log(a)):Math.log(a)
+math.log = (a,b)=>typeof(b)!="number"?(Math.log(b)/Math.log(a)):Math.log(a)
 
 // Trig
 math.sin = a=>Math.sin(a)
@@ -112,7 +112,7 @@ math.cos = a=>Math.cos(a)
 math.tan = a=>Math.tan(a)
 math.asin = a=>Math.asin(a)
 math.acos = a=>Math.acos(a)
-math.atan = (a,b)=>b?Math.atan2(a,b):Math.atan(a)
+math.atan = (a,b)=>typeof(b)!="number"?Math.atan2(a,b):Math.atan(a)
 math.deg = a=>a/Math.PI*180
 math.rad = a=>a/180*Math.PI
 
