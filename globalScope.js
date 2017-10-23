@@ -159,7 +159,7 @@ string.format = function(str){
 	for(var i = 0; i < splt.length; i++){
 		var s = splt[i];
 		if(s[0]=="%"){
-			var action = string.format[s[1].toLowerCase()]
+			var action = string.format[s[1]] || string.format[s[1].toLowerCase()]
 			if(!action)
 				throw "Unknown format type: "+s[1];
 			out += action(arguments[argi++]);
@@ -169,10 +169,16 @@ string.format = function(str){
 	}
 	return out;
 }
-string.format.s = s=>""+s;
+string.format.s = s=>globals.toString(s);
+string.format.u = s=>globals.toString(s).toUpperCase();
+string.format.l = s=>globals.toString(s).toLowerCase()
+string.format.c = s=>string.char(Number(s))
+string.format.b = s=>string.byte(globals.toString(s))
 string.format.q = s=>JSON.stringify(s);
 string.format.i = s=>Math.floor(Number(s))
 string.format.f = string.format.d = string.format.n = s=>Number(s)
+string.format.x = s=>Number(s).toString(16)
+string.format.X = s=>Number(s).toString(16).toUpperCase()
 string.format['%'] = ()=>'%'
 
 // Basic Manipulation
@@ -233,7 +239,7 @@ table.apply = function(t, fn){
 	for(var s in t.vars){
 		asList[s] = t.vars[s]
 	}
-	return fn[0].apply(undefined, asList)
+	return fn.apply(undefined, asList)
 }
 table.reverse = function(t){
 	var len = globals.math.vars.len
@@ -249,6 +255,9 @@ table.insert = function(t, index, value){
 	if(value==undefined){
 		value = index
 		index = ln
+	}
+	if(index==undefined){
+		index = math.len(t);
 	}
 	for(var i=ln; i>index; i--){
 		t.vars[i] = t.vars[i-1]
@@ -271,7 +280,7 @@ table.remove = function(t, index){
 }
 table.pop = table.remove
 
-table.len = math.len
+table.len = t=>math.len(t)
 table.rotate = (t, n)=>{
 	n = n || 1;
 	while(n>0){
@@ -286,13 +295,18 @@ table.rotate = (t, n)=>{
 }
 
 table.add = function(t,b){
+	if(typeof(t)!="object"){
+		var nT = objects.newList();
+		nT.vars[0] = t;
+		t = nT
+	}
 	if(typeof(b)!="object"){
 		var nB = objects.newList();
 		nB.vars[0] = b;
 		b = nB
 	}
 	for(var i=0; i < table.len(b); i++){
-		table.push(b.vars[i]);
+		table.push(t,b.vars[i]);
 	}
 	return t;
 }
@@ -319,7 +333,16 @@ table.clone = function(t){
 globals.defaultMeta = objects.newList();
 globals.defaultMeta.vars.string = objects.newList();
 globals.defaultMeta.vars.string.vars._index = globals.string;
-globals.defaultMeta.vars.string.vars._mod = string.format;
+globals.defaultMeta.vars.string.vars._mod = (a,b)=>{
+	if(typeof(b)=="object"){
+		return table.apply(table.add(a, b), string.format)
+	}else{
+		return string.format(a, b)
+	}
+}
+globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"&&typeof(b)=="number"?
+								   string.rep(a,b) :typeof(a)=="number"&&typeof(b)=="string"?
+								   string.rep(b,a) :undefined;
 
 globals.defaultMeta.vars.object = objects.newList();
 globals.defaultMeta.vars.object.vars._index = globals.table;
