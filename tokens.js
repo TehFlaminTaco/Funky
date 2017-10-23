@@ -4,7 +4,7 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | ternary | call | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
@@ -23,6 +23,7 @@ module.exports={
     "function": "'func' 'tion'?",
     "arg_list": "'\\(' arg_fill* '\\)'",
     "arg_fill": "assignment ','? | var ','?",
+    "eval": "'eval' expression",
     "forloop": "'for' var? 'in' expression exporblock | 'for' '\\('? program_1{,3} '\\)'? exporblock",
     "ifblock": "'if' expression exporblock elif?",
     "elif": "'else' exporblock",
@@ -181,6 +182,17 @@ module.exports={
           ],
           "type": "token",
           "text": "function_builder"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "eval"
         }
       ],
       [
@@ -1081,6 +1093,28 @@ module.exports={
           ],
           "type": "regex",
           "text": ","
+        }
+      ]
+    ],
+    "eval": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "eval"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
         }
       ]
     ],

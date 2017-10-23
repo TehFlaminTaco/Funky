@@ -46,6 +46,30 @@ objects.newScope = function(parent,isGlobal){
 			return n.parent.getScope(name);
 	}
 
+	n.toString = function(){
+		var m = objects.getMetaFunc(n, "_toString")
+		if(m){
+			if(typeof(m)=="function"){
+				return m(n)
+			}else{
+				return m
+			}
+		}
+		if(n.vars.asString){
+			if(typeof n.vars.asString == "function")
+				return n.vars.asString()
+			if(typeof n.vars.asString == "string" || typeof n.vars.asString == "number")
+				return n.vars.asString
+		}
+		var s = "{";
+		var sep = "";
+		for(key in n.vars){
+			s += sep + globals.vars.toString(key) + "="+(globals.vars.toString(n.vars[key]))
+			sep = ","
+		}
+		return s + "}"
+	}
+
 	if(isGlobal)	// This is bad practice. Never do this again.
 		globals = n;
 	return n;

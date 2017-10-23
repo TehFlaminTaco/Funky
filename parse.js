@@ -1,6 +1,7 @@
-const parse = {};
+const parse = module.exports;
 const objects = require("./objects.js");
 const globals = require("./globalScope.js");
+const tokenizer = require("./tokenizer.js");
 
 // PARSER FUNCTIONS
 // PASS IT A TOKEN, EG: {name: 'expression', data: [...]}
@@ -42,7 +43,9 @@ parse.Expression = function(exp, scope){
 		return parse.Crementor(exp, scope);
 	if(typ == "is")
 		return parse.IsEvent(exp, scope);
-
+	if(typ == "eval"){
+		return parse.Eval(exp, scope);
+	}
 	throw new Error("Unknown expression type: "+typ)
 }
 
@@ -476,6 +479,19 @@ parse.ForLoop = function(forloop, scope){
 	return lastOut;
 }
 
+parse.Eval = function(evl, scope){
+	var str = parse.Expression(evl.data[1].items[0], scope);
+	var chnk = tokenizer.compile(str);
+	var fnk = function(){
+		var midScope = objects.newScope(scope);
+		midScope.vars.arguments = objects.ListFromObject(arguments)
+		return parse.Program(chnk, midScope);
+	}
+
+	fnk.stringify = evl.text;
+	return fnk;
+}
+
 parse.IfBlock = function(ifb, scope){
 	var subScope = objects.newScope(scope);
 	var exp = ifb.data[1].items[0];
@@ -560,5 +576,3 @@ parse.Program = function(prog, upscope){
 	}
 	return returnvalue;
 }
-
-module.exports = parse;
