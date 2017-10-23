@@ -1,12 +1,14 @@
 const objects = {};
+var globals;
 
-objects.newScope = function(parent){
+objects.newScope = function(parent,isGlobal){
 	var n = Object.create(null,{});
 	n.vars = Object.create(null,{});
+	n.defined = Object.create(null,{});
 	n.parent = parent;
 	n.listeners = [];
 	n.getVar = function(name){
-		if(n.vars[name]!==undefined)
+		if(n.vars[name]!==undefined||n.defined[name])
 			return n.vars[name]
 		else if(!n.parent){
 			var m = objects.getMetaFunc(n, "_index");
@@ -22,7 +24,9 @@ objects.newScope = function(parent){
 			return n.parent.getVar(name);
 		return n.vars[name];
 	}
-	n.setVar = function(name, val){
+	n.setVar = function(name, val, force){
+		if(force)
+			n.defined[name]=true;
 		if(n.parent && n.vars[name]===undefined)
 			return n.parent.setVar(name, val)
 		var m = objects.getMetaFunc(n, "_newindex");
@@ -41,6 +45,9 @@ objects.newScope = function(parent){
 		if(n.parent)
 			return n.parent.getScope(name);
 	}
+
+	if(isGlobal)	// This is bad practice. Never do this again.
+		globals = n;
 	return n;
 }
 
@@ -116,7 +123,7 @@ objects.newList = function(contents){
 		var s = "{";
 		var sep = "";
 		for(key in l.vars){
-			s += sep + key.toString() + "="+(l.vars[key]==undefined?"undefined":l.vars[key].toString())
+			s += sep + globals.vars.toString(key) + "="+(globals.vars.toString(l.vars[key]))
 			sep = ","
 		}
 		return s + "}"

@@ -1,16 +1,36 @@
 const objects = require("./objects.js");
 const parse = require("./parse.js");
+const stdin = require("./stdin.js");
+
+
 const globals = {};
 
 globals.print = function(){
 	var a = [];
 	for(var i=0; i < arguments.length; i++)
-		a[i] = arguments[i];
+		a[i] = globals.toString(arguments[i]);
 	console.log(a.join(" "))
 	return a[0];
 }
 
-globals.toString = s=>s.toString()
+globals.write = function(){
+	var a = [];
+	for(var i=0; i < arguments.length; i++)
+		a[i] = globals.toString(arguments[i]);
+	process.stdout.write(a.join(""))
+	return a[0];
+}
+
+globals.toString = s=>{
+	f=globals.getMetaFunc(s, "_toString");
+	if(f){
+		if(typeof(f)=="function")
+			return f(s)
+		else
+			return f
+	}
+	return s==undefined?"nil":s.toString()
+}
 
 globals.pairs = function(list){
 	var keys = Object.keys(list.vars);
@@ -85,6 +105,10 @@ globals.getMetaFunc = function(val, name){
 
 globals.type = ent => typeof(ent)
 
+globals.true = true;
+globals.false = false;
+globals.nil = undefined;
+
 objects.getMetaFunc = globals.getMetaFunc;
 
 ///////////////////////////////////////
@@ -104,7 +128,12 @@ math.ceil  = (a,b)=>Math.ceil (a*10**(b||0))/10**(b||0)
 math.max = Math.max
 math.min = Math.min
 math.clamp = (a,b,c)=>[a,b,c].sort()[1]
-math.log = (a,b)=>typeof(b)!="number"?(Math.log(b)/Math.log(a)):Math.log(a)
+math.log = (a,b)=>typeof(b)=="number"?(Math.log(b)/Math.log(a)):Math.log(a)
+math.random = (a,b)=>typeof(b)=="number"?
+				Math.round(Math.random()*(b-a)+a):
+					typeof(a)=="number"?
+					math.random(1,a):
+					Math.random()
 
 // Trig
 math.sin = a=>Math.sin(a)
@@ -112,7 +141,7 @@ math.cos = a=>Math.cos(a)
 math.tan = a=>Math.tan(a)
 math.asin = a=>Math.asin(a)
 math.acos = a=>Math.acos(a)
-math.atan = (a,b)=>typeof(b)!="number"?Math.atan2(a,b):Math.atan(a)
+math.atan = (a,b)=>typeof(b)=="number"?Math.atan2(a,b):Math.atan(a)
 math.deg = a=>a/Math.PI*180
 math.rad = a=>a/180*Math.PI
 
@@ -167,6 +196,23 @@ string.gmatch = (s, regex)=>{
 			return oot
 		}
 	}
+}
+
+//////////////
+// IO STUFF //
+//////////////
+globals.io = objects.newList();
+var io = globals.io.vars
+
+io.write = function(){
+	var a = [];
+	for(var i=0; i < arguments.length; i++)
+		a[i] = globals.toString(arguments[i]);
+	process.stdout.write(a.join(""))
+	return a[0];
+}
+io.read = function(method){
+	return stdin.read_line();
 }
 
 /////////////////
@@ -280,8 +326,11 @@ globals.defaultMeta.vars.object.vars._index = globals.table;
 
 globals.defaultMeta.vars.function = objects.newList();
 globals.defaultMeta.vars.number = objects.newList();
+globals.defaultMeta.vars.boolean = objects.newList();
+globals.defaultMeta.vars.undefined = objects.newList();
 
-var globalsScope = objects.newScope();
+
+var globalsScope = objects.newScope(undefined,true);
 globalsScope.vars = globals;
 
 globals._G = globalsScope;

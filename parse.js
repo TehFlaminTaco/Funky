@@ -109,6 +109,7 @@ globals.vars.math.vars.pow = (a,b)=>a**b;
 globals.vars.math.vars.mod = (a,b)=>a%b;
 globals.vars.math.vars.and = (a,b)=>a&&b;
 globals.vars.math.vars.or = (a,b)=>a||b;
+globals.vars.math.vars.concat = (a,b)=>globals.vars.toString(a)+globals.vars.toString(b)
 globals.vars.math.vars.bitor = (a,b)=>a|b;
 globals.vars.math.vars.bitand = (a,b)=>a&b;
 globals.vars.math.vars.bitxor = (a,b)=>a^b;
@@ -201,6 +202,7 @@ parse.Var = function(v, scope){
 					return scope.vars[name];
 				},
 				setter: function(val){
+					scope.defined[name] = true;
 					scope.vars[name] = val;
 					return val;
 				}
@@ -319,10 +321,11 @@ parse.Function = function(func, scope){
 					vList[i].setter(arguments[i])
 			}
 			for(var i=arguments.length+1; i<vList.length; i++){
-				vList[i].setter(null)
+				vList[i].setter(undefined)
 			}
 			for(var name in arglistScope.vars){
 				tmpScope.vars[name] = arglistScope.vars[name]
+				tmpScope.defined[name] = true;
 			}
 			if(toDo.name == "block"){
 				var out = parse.Program(toDo, func.scope || tmpScope);
@@ -382,10 +385,11 @@ parse.Function = function(func, scope){
 					vList[i].setter(arguments[i])
 			}
 			for(var i=arguments.length; i<vList.length; i++){
-				vList[i].setter(null)
+				vList[i].setter(undefined)
 			}
 			for(var name in arglistScope.vars){
 				tmpScope.vars[name] = arglistScope.vars[name]
+				tmpScope.defined[name] = true;
 			}
 			if(toDo.name == "block"){
 				var out = parse.Program(toDo, func.scope || tmpScope);

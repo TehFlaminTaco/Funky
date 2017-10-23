@@ -4,7 +4,7 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | ternary | call | unaryarithmatic | arithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | ternary | call | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
@@ -33,7 +33,7 @@ module.exports={
     "is": "var 'is' '\\*' | var 'is' expression",
     "arithmatic": "expression: operator expression",
     "unaryarithmatic": "unoperator expression",
-    "operator": "add | sub | mult | div | intdiv | pow | mod | and | or | bitor | bitand | bitxor | bitshiftl | bitshiftr | le | lt | ge | gt | eq | ne",
+    "operator": "add | sub | mult | div | intdiv | pow | mod | and | or | concat | bitor | bitand | bitxor | bitshiftl | bitshiftr | le | lt | ge | gt | eq | ne",
     "add": "'\\+'",
     "sub": "'-'",
     "mult": "'\\*'",
@@ -43,6 +43,7 @@ module.exports={
     "mod": "'\\%'",
     "and": "'and'",
     "or": "'or'",
+    "concat": "'\\.\\.'",
     "bitor": "'\\|'",
     "bitand": "'&'",
     "bitxor": "'~'",
@@ -212,7 +213,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "unaryarithmatic"
+          "text": "arithmatic"
         }
       ],
       [
@@ -223,7 +224,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "arithmatic"
+          "text": "unaryarithmatic"
         }
       ],
       [
@@ -1586,6 +1587,17 @@ module.exports={
             1
           ],
           "type": "token",
+          "text": "concat"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
           "text": "bitor"
         }
       ],
@@ -1814,6 +1826,19 @@ module.exports={
           ],
           "type": "regex",
           "text": "or"
+        }
+      ]
+    ],
+    "concat": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "\\.\\."
         }
       ]
     ],
