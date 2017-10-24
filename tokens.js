@@ -14,7 +14,7 @@ module.exports={
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
-    "call": "expression: '\\(' call_1* '\\)'",
+    "call": "expression: constant | expression: '\\(' call_1* '\\)'",
     "call_1": "expression ','?",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
     "local": "'local' | 'var'",
@@ -676,6 +676,26 @@ module.exports={
       ]
     ],
     "call": [
+      [
+        {
+          "prefix": true,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "constant"
+        }
+      ],
       [
         {
           "prefix": true,
@@ -2219,6 +2239,26 @@ module.exports={
         ]
       ],
       "call": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "constant"
+          }
+        ],
         [
           {
             "prefix": true,
