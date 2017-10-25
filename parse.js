@@ -437,7 +437,9 @@ parse.IsEvent = function(is, scope){
 
 parse.Deop = function(expBlock, scope){
 	var op = expBlock.data[1].items[0].data[0].items[0].name;
-	return (a,b)=>parse.Operator(op,a,b);
+	func = (a,b)=>parse.Operator(op,a,b);
+	func.stringify = expBlock.text;
+	return func;
 }
 
 parse.ExpBlock = function(expBlock, scope){

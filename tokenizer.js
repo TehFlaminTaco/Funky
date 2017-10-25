@@ -123,8 +123,8 @@ var matchToken = function(tokenname, str, i, as_prefix){
 			var to_match = option[sub_id]
 			var max_matches = to_match.count[1];
 			var this_match = [];
-			option_str = option_str.replace(/^\s*/,"");
 			while(max_matches != 0){
+				option_str = option_str.replace(/^(\$\*([^*]|\*[^$])*\*\$|\$[^*\r\n].*|\s)*/,"");
 				if(to_match.prefix){
 					if(as_prefix){
 						this_match.push(as_prefix)
