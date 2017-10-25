@@ -124,7 +124,7 @@ var matchToken = function(tokenname, str, i, as_prefix){
 			var max_matches = to_match.count[1];
 			var this_match = [];
 			while(max_matches != 0){
-				option_str = option_str.replace(/^(\$\*([^*]|\*[^$])*\*\$|\$[^*\r\n].*|\s)*/,"");
+				option_str = option_str.replace(/^(--\[(=*)\[([^\]]|\](?!\2\]))*\]\2\]|--[^[\r\n].*|\s)/,"");
 				if(to_match.prefix){
 					if(as_prefix){
 						this_match.push(as_prefix)
