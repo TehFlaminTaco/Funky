@@ -14,7 +14,7 @@ module.exports={
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
-    "call": "expression: stringconstant | expression: tableconstant | expression: '\\(' call_1* '\\)'",
+    "call": "expression: '\\(' call_1* '\\)'",
     "call_1": "expression ','?",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
     "local": "'local' | 'var'",

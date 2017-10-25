@@ -188,7 +188,7 @@ string.lower = s=>s.toLowerCase()
 string.upper = s=>s.toUpperCase()
 
 // Character Code Stuff
-string.byte = s=>String.charCodeAt(s,0)
+string.byte = s=>s.charCodeAt(0)
 string.char = s=>String.fromCharCode(s)
 
 // Regex stuff

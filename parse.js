@@ -559,28 +559,18 @@ parse.Crementor = function(cre, scope){
 
 parse.Call = function(call, scope){
 	var toCall = parse.Expression(call.data[0].items[0], scope);
-	if(call.data[2]){
-		var args = call.data[2].items;
-		var parsedArgs = [];
-		for(var i=0; i < args.length; i++){
-			var val = parse.Expression(args[i].data[0].items[0], scope);
-			parsedArgs.push(val);
-		}
-		if(typeof globals.vars.getMetaFunc(toCall, "_call") == "function"){
-			return globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));
-		}
-		if(typeof toCall == "function")
-			return toCall.apply(toCall, parsedArgs);
-		return toCall;
-	}else{
-		var parsedArgs = [parse.Constant(call.data[1].items[0], scope)]
-		if(typeof globals.vars.getMetaFunc(toCall, "_call") == "function"){
-			return globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));
-		}
-		if(typeof toCall == "function")
-			return toCall.apply(toCall, parsedArgs);
-		return toCall;
+	var args = call.data[2].items;
+	var parsedArgs = [];
+	for(var i=0; i < args.length; i++){
+		var val = parse.Expression(args[i].data[0].items[0], scope);
+		parsedArgs.push(val);
 	}
+	if(typeof globals.vars.getMetaFunc(toCall, "_call") == "function"){
+		return globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));
+	}
+	if(typeof toCall == "function")
+		return toCall.apply(toCall, parsedArgs);
+	return toCall;
 }
 
 parse.Program = function(prog, upscope){
