@@ -160,7 +160,8 @@ globals.vars.math.vars.len = a=>{
 globals.vars.math.vars.bitnot = a=>~a;
 
 parse.Constant = function(cons, scope){
-	cons = cons.data[0].items[0];
+
+	cons = cons.name=="constant"?cons.data[0].items[0]:cons;
 	var constyp = cons.name;
 	if(constyp == "numberconstant")
 		return Number(cons.data[0].items[0]);
