@@ -4,7 +4,7 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
@@ -32,9 +32,10 @@ module.exports={
     "ternary": "expression: '\\?' expression elset",
     "elset": "':' expression",
     "is": "var 'is' '\\*' | var 'is' expression",
+    "deop": "'@' operator",
     "arithmatic": "expression: operator expression",
     "unaryarithmatic": "unoperator expression",
-    "operator": "add | sub | mult | div | intdiv | pow | mod | and | or | concat | bitor | bitand | bitxor | bitshiftl | bitshiftr | le | lt | ge | gt | eq | ne",
+    "operator": "add | sub | mult | intdiv | div | pow | mod | and | or | concat | bitor | bitand | bitxor | bitshiftl | bitshiftr | le | lt | ge | gt | eq | ne",
     "add": "'\\+'",
     "sub": "'-'",
     "mult": "'\\*'",
@@ -215,6 +216,17 @@ module.exports={
           ],
           "type": "token",
           "text": "call"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "deop"
         }
       ],
       [
@@ -1480,6 +1492,28 @@ module.exports={
         }
       ]
     ],
+    "deop": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "@"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "operator"
+        }
+      ]
+    ],
     "arithmatic": [
       [
         {
@@ -1575,7 +1609,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "div"
+          "text": "intdiv"
         }
       ],
       [
@@ -1586,7 +1620,7 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "intdiv"
+          "text": "div"
         }
       ],
       [

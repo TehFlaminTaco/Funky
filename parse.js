@@ -25,6 +25,8 @@ parse.Expression = function(exp, scope){
 		return parse.UnaryArithmatic(exp, scope);
 	if(typ == "arithmatic")
 		return parse.Arithmatic(exp, scope);
+	if(typ == "deop")
+		return parse.Deop(exp, scope);
 	if(typ == "function_builder")
 		return parse.Function(exp, scope);
 	if(typ == "paranexp")
@@ -431,6 +433,11 @@ parse.IsEvent = function(is, scope){
 			}
 		})
 	return evnt;
+}
+
+parse.Deop = function(expBlock, scope){
+	var op = expBlock.data[1].items[0].data[0].items[0].name;
+	return (a,b)=>parse.Operator(op,a,b);
 }
 
 parse.ExpBlock = function(expBlock, scope){

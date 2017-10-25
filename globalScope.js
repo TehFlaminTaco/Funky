@@ -330,6 +330,72 @@ table.clone = function(t){
 	return newT
 }
 
+table.sublist = function(t,ind,len){
+	ind = ind || 0;
+	len = len || math.len(t)-ind;
+	var outList = objects.newList();
+	var c = 0;
+	for(var i=ind; i<(ind+len); i++){
+		outList.vars[c++] = t.vars[i];
+	}
+	return outList;
+}
+
+table.sort = function(t,f){
+	var t_len = math.len(t);
+	var pivot = Math.floor(Math.random()*t_len)
+	var pivotVal = t.vars[pivot];
+	var left = objects.newList();
+	var right = objects.newList();
+	var l_i = 0;
+	var r_i = 0;
+	f = f || math.lt;
+	for(var i=0; i<t_len; i++){
+		if(i!=pivot){
+			if(f(t.vars[i], pivotVal)){
+				left.vars[l_i++] = t.vars[i];
+			}else{
+				right.vars[r_i++] = t.vars[i];
+			}
+		}
+	}
+	if(l_i>1)
+		left = table.sort(left, f);
+	if(r_i>1)
+		right = table.sort(right, f);
+	return table.add(table.add(left, pivotVal),right)
+}
+
+table.reduce = function(t, f){
+	var o = t.vars[0]
+	var tl = math.len(t);
+	for(var i=1; i<tl; i++){
+		o = f(o, t.vars[i])
+	}
+	return o;
+}
+
+table.fold = function(t, f){
+	var o = objects.newList();
+	var tl = math.len(t);
+	for(var i=1; i<tl; i++){
+		o.vars[i-1] = f(t.vars[i-1], t.vars[i])
+	}
+	return o;
+}
+
+table.cumulate = function(t, f){
+	var o = objects.newList();
+	var v = t.vars[0];
+	o.vars[0] = v;
+	var tl = math.len(t);
+	for(var i=1; i<tl; i++){
+		v = f(v, t.vars[i])
+		o.vars[i] = v;
+	}
+	return o;
+}
+
 globals.defaultMeta = objects.newList();
 globals.defaultMeta.vars.string = objects.newList();
 globals.defaultMeta.vars.string.vars._index = globals.string;
