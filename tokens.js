@@ -704,46 +704,6 @@ module.exports={
             1,
             1
           ],
-          "type": "token",
-          "text": "stringconstant"
-        }
-      ],
-      [
-        {
-          "prefix": true,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "tableconstant"
-        }
-      ],
-      [
-        {
-          "prefix": true,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
           "type": "regex",
           "text": "\\("
         },
@@ -2293,46 +2253,6 @@ module.exports={
         ]
       ],
       "call": [
-        [
-          {
-            "prefix": true,
-            "count": [
-              1,
-              1
-            ],
-            "type": "token",
-            "text": "expression"
-          },
-          {
-            "prefix": false,
-            "count": [
-              1,
-              1
-            ],
-            "type": "token",
-            "text": "stringconstant"
-          }
-        ],
-        [
-          {
-            "prefix": true,
-            "count": [
-              1,
-              1
-            ],
-            "type": "token",
-            "text": "expression"
-          },
-          {
-            "prefix": false,
-            "count": [
-              1,
-              1
-            ],
-            "type": "token",
-            "text": "tableconstant"
-          }
-        ],
         [
           {
             "prefix": true,

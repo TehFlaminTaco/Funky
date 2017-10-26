@@ -10,7 +10,10 @@ function read_until(cond){
     var out;
     while(!(out = builtStr.match(cond))){
         try{
-            tmp_len += fs.readSync(process.stdin.fd, tmp, 0, BUFSIZE);
+            tmp_len = fs.readSync(process.stdin.fd, tmp, 0, BUFSIZE);
+            if(tmp_len==0){
+                return undefined;
+            }
             builtStr += tmp.toString("utf8",0,tmp_len)
         }catch(e){
             return undefined;
