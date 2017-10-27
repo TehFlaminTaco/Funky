@@ -258,9 +258,11 @@ parse.Var = function(v, scope){
 						}
 					}
 					if(curry){
-						return function(){
+						var fnc= function(){
 							return v(rootTab, ...arguments)
 						}
+						fnc.stringify = dat.text;
+						return fnc
 					}
 					return v;
 				},
@@ -274,13 +276,11 @@ parse.Var = function(v, scope){
 				getter: function(){
 					var v = rootTab.getVar(name);
 					if(curry){
-						return function(){
-							var argsAsList = [];
-							for(var argn in arguments){
-								argsAsList[argn] = arguments[argn];
-							}
-							return v.apply(rootTab, [rootTab].concat(argsAsList))
+						var fnc= function(){
+							return v(rootTab, ...arguments)
 						}
+						fnc.stringify = dat.text;
+						return fnc
 					}
 					return v;
 				},

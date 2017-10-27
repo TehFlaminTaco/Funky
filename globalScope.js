@@ -421,6 +421,7 @@ globals.defaultMeta.vars.undefined = objects.newList();
 
 var globalsScope = objects.newScope(undefined,true);
 globalsScope.vars = globals;
+globalsScope.readOnly = true;
 
 globals._G = globalsScope;
 
