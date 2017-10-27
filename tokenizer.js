@@ -171,7 +171,8 @@ var matchToken = function(tokenname, str, i, as_prefix){
 						var contestent = matchToken(name, option_str, i, this_tokn)
 						if(contestent && contestent.remainder.length < shortlen){
 							shortlen = contestent.remainder.length
-							shortest = {data: [{name: name, count: 1, items: [contestent]}], name:tokenname, remainder: contestent.remainder, text: this_tokn.text + str.substr(0, str.length - contestent.remainder.length)}
+							contestent.text = str.substr(0, str.length-contestent.remainder.length)
+							shortest = {data: [{name: name, count: 1, items: [contestent]}], name:tokenname, remainder: contestent.remainder, text: contestent.text}
 						}
 					}
 					option_str = shortest.remainder
