@@ -165,7 +165,7 @@ objects.newEvent = function(scope){
 	}
 	t.vars.call = function(){
 		for(var i=0; i < t.hooked.length; i++){
-			t.hooked[i]();
+			t.hooked[i](...arguments);
 		}
 	}
 	return t;
