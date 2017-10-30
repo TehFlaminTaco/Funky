@@ -76,7 +76,7 @@ objects.newScope = function(parent,isGlobal){
 }
 
 objects.ListFromObject = function(obj){
-	if(typeof(obj)=="object"){
+	if(typeof(obj)=="object" && !obj.vars){
 		var l = objects.newList();
 		for(var name in obj){
 			l.vars[name] = objects.ListFromObject(obj[name])
