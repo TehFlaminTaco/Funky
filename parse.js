@@ -419,7 +419,10 @@ parse.WhenBlock = function(when, scope){
 	var evnt = parse.Expression(when.data[1].items[0], scope);
 	var todo = function(){
 		var nScope = objects.newScope(scope);
-		nScope.vars.arguments = objects.ListFromObject(arguments);
+		nScope.vars.arguments = objects.newList()
+		for(var i=0; i < arguments.length; i++){
+			nScope.vars.arguments[i] = arguments[i];
+		}
 		parse.ExpBlock(when.data[2].items[0], nScope);
 	}
 	evnt.vars.hook(todo);
