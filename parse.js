@@ -417,7 +417,7 @@ parse.Function = function(func, scope){
 
 parse.WhenBlock = function(when, scope){
 	var evnt = parse.Expression(when.data[1].items[0], scope);
-	var todo = ()=>{
+	var todo = function(){
 		var nScope = objects.newScope(scope);
 		nScope.vars.arguments = objects.ListFromObject(arguments);
 		parse.ExpBlock(when.data[2].items[0], nScope);
