@@ -1,4 +1,32 @@
-const objects = require("./objects.js");
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: globalScope.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: globalScope.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>const objects = require("./objects.js");
 const parse = require("./parse.js");
 const stdin = require("./stdin.js");
 
@@ -15,7 +43,7 @@ const globals = {};
  */
 globals.print = function(){
 	var a = [];
-	for(var i=0; i < arguments.length; i++)
+	for(var i=0; i &lt; arguments.length; i++)
 		a[i] = globals.toString(arguments[i]);
 	console.log(a.join(" "))
 	return a[0];
@@ -31,7 +59,7 @@ globals.print = function(){
  */
 globals.write = function(){
 	var a = [];
-	for(var i=0; i < arguments.length; i++)
+	for(var i=0; i &lt; arguments.length; i++)
 		a[i] = globals.toString(arguments[i]);
 	process.stdout.write(a.join(""))
 	return a[0];
@@ -136,7 +164,7 @@ globals.newEvent = function(){
  */
 globals.newList = function(){
 	var l = objects.newList();
-	for(var i=0; i < arguments.length; i++){
+	for(var i=0; i &lt; arguments.length; i++){
 		l.vars[i] = arguments[i];
 	}
 	return l;
@@ -185,12 +213,12 @@ globals.later = function(time, callback){
  */
 globals.getMetaFunc = function(val, name){
 	if(typeof val == "object"){
-		if(typeof val.vars._meta == "object" && val.vars._meta.vars[name] !== undefined){
+		if(typeof val.vars._meta == "object" &amp;&amp; val.vars._meta.vars[name] !== undefined){
 			return val.vars._meta.vars[name];
 		}
 	}
 
-	if(typeof globals.defaultMeta == "object" && typeof globals.defaultMeta.vars[typeof val] == "object" && globals.defaultMeta.vars[typeof val].vars[name]!==undefined){
+	if(typeof globals.defaultMeta == "object" &amp;&amp; typeof globals.defaultMeta.vars[typeof val] == "object" &amp;&amp; globals.defaultMeta.vars[typeof val].vars[name]!==undefined){
 		return globals.defaultMeta.vars[typeof val].vars[name];	
 	}
 }
@@ -374,7 +402,7 @@ string.format = function(str){
 	var splt = str.match(/%.|./g)
 	var out = "";
 	var argi = 1;
-	for(var i = 0; i < splt.length; i++){
+	for(var i = 0; i &lt; splt.length; i++){
 		var s = splt[i];
 		if(s[0]=="%"){
 			var action = string.format[s[1]] || string.format[s[1].toLowerCase()]
@@ -473,7 +501,7 @@ var io = globals.io.vars
  */
 io.write = function(){
 	var a = [];
-	for(var i=0; i < arguments.length; i++)
+	for(var i=0; i &lt; arguments.length; i++)
 		a[i] = globals.toString(arguments[i]);
 	process.stdout.write(a.join(""))
 	return a[0];
@@ -588,7 +616,7 @@ table.remove = function(t, index){
 		index = ln-1
 	}
 	var out = t.vars[index]
-	for(var i=index; i<ln; i++){
+	for(var i=index; i&lt;ln; i++){
 		t.vars[i] = t.vars[i+1]
 	}
 	delete t.vars[ln-1]
@@ -618,7 +646,7 @@ table.rotate = (t, n)=>{
 		table.insert(t,0,table.pop(t));
 		n--;
 	}
-	while(n<0){
+	while(n&lt;0){
 		table.insert(t,table.remove(t,0));
 		n++;
 	}
@@ -644,7 +672,7 @@ table.add = function(t,b){
 		nB.vars[0] = b;
 		b = nB
 	}
-	for(var i=0; i < table.len(b); i++){
+	for(var i=0; i &lt; table.len(b); i++){
 		table.push(t,b.vars[i]);
 	}
 	return t;
@@ -683,7 +711,7 @@ table.sublist = function(t,ind,len){
 	len = len || math.len(t)-ind;
 	var outList = objects.newList();
 	var c = 0;
-	for(var i=ind; i<(ind+len); i++){
+	for(var i=ind; i&lt;(ind+len); i++){
 		outList.vars[c++] = t.vars[i];
 	}
 	return outList;
@@ -699,7 +727,7 @@ table.sort = function(t,f){
 	var l_i = 0;
 	var r_i = 0;
 	f = f || math.lt;
-	for(var i=0; i<t_len; i++){
+	for(var i=0; i&lt;t_len; i++){
 		if(i!=pivot){
 			if(f(t.vars[i], pivotVal)){
 				left.vars[l_i++] = t.vars[i];
@@ -719,7 +747,7 @@ table.sort = function(t,f){
 table.reduce = function(t, f){
 	var o = t.vars[0]
 	var tl = math.len(t);
-	for(var i=1; i<tl; i++){
+	for(var i=1; i&lt;tl; i++){
 		o = f(o, t.vars[i])
 	}
 	return o;
@@ -729,7 +757,7 @@ table.reduce = function(t, f){
 table.fold = function(t, f){
 	var o = objects.newList();
 	var tl = math.len(t);
-	for(var i=1; i<tl; i++){
+	for(var i=1; i&lt;tl; i++){
 		o.vars[i-1] = f(t.vars[i-1], t.vars[i])
 	}
 	return o;
@@ -741,7 +769,7 @@ table.cumulate = function(t, f){
 	var v = t.vars[0];
 	o.vars[0] = v;
 	var tl = math.len(t);
-	for(var i=1; i<tl; i++){
+	for(var i=1; i&lt;tl; i++){
 		v = f(v, t.vars[i])
 		o.vars[i] = v;
 	}
@@ -758,8 +786,8 @@ globals.defaultMeta.vars.string.vars._mod = (a,b)=>{
 		return string.format(a, b)
 	}
 }
-globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"&&typeof(b)=="number"?
-								   string.rep(a,b) :typeof(a)=="number"&&typeof(b)=="string"?
+globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"&amp;&amp;typeof(b)=="number"?
+								   string.rep(a,b) :typeof(a)=="number"&amp;&amp;typeof(b)=="string"?
 								   string.rep(b,a) :undefined;
 
 globals.defaultMeta.vars.object = objects.newList();
@@ -777,4 +805,26 @@ globalsScope.readOnly = true;
 
 globals._G = globalsScope;
 
-module.exports = globalsScope;
+module.exports = globalsScope;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="Event.html">Event</a></li><li><a href="Object.html">Object</a></li><li><a href="Scope.html">Scope</a></li></ul><h3>Namespaces</h3><ul><li><a href="io.html">io</a></li><li><a href="math.html">math</a></li><li><a href="string.html">string</a></li><li><a href="table.html">table</a></li></ul><h3>Global</h3><ul><li><a href="global.html#false">false</a></li><li><a href="global.html#getMetaFunc">getMetaFunc</a></li><li><a href="global.html#keys">keys</a></li><li><a href="global.html#later">later</a></li><li><a href="global.html#newEvent">newEvent</a></li><li><a href="global.html#newList">newList</a></li><li><a href="global.html#nil">nil</a></li><li><a href="global.html#pairs">pairs</a></li><li><a href="global.html#print">print</a></li><li><a href="global.html#setParent">setParent</a></li><li><a href="global.html#toString">toString</a></li><li><a href="global.html#true">true</a></li><li><a href="global.html#type">type</a></li><li><a href="global.html#values">values</a></li><li><a href="global.html#write">write</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Tue Oct 31 2017 13:47:11 GMT+1100 (AUS Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
