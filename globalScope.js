@@ -677,6 +677,21 @@ table.clone = function(t){
 	return newT
 }
 
+/**
+ * Create a clone of an object, applying a function to all entries.
+ * @function
+ * @param {Object} table - The table to clone
+ * @param {function} mapping - The function to map over.
+ * @returns {Object} modified - The mapped table.
+ */
+table.map = function(t, fun){
+	var newT = objects.newList();
+	for(var name in t.vars){
+		newT.vars[name] = fun(t.vars[name], name)
+	}
+	return newT
+}
+
 /** @function */
 table.sublist = function(t,ind,len){
 	ind = ind || 0;
