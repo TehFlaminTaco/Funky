@@ -33,6 +33,8 @@ parse.Expression = function(exp, scope){
 		return parse.Function(exp, scope);
 	if(typ == "paranexp")
 		return parse.Expression(exp.data[1].items[0], scope);
+	if(typ == "tryblock")
+		return parse.TryBlock(exp, scope)
 	if(typ == "forloop")
 		return parse.ForLoop(exp, scope);
 	if(typ == "ifblock")
@@ -452,6 +454,25 @@ parse.ExpBlock = function(expBlock, scope){
 	}else{
 		return parse.Expression(expBlock.data[0].items[0], scope)
 	}
+}
+
+parse.TryBlock = function(expBlock, scope){
+	var toRun = expBlock.data[1].items[0];
+	var out;
+	try{
+		out = parse.ExpBlock(toRun,scope);
+	}catch(e){
+		if(expBlock.data[2].count > 0){
+			var catcher = expBlock.data[2].items[0];
+			var arg = catcher.data[1].items[0].data[1].items[0].data[1].items[0]
+			var catchExp = catcher.data[2].items[0];
+			
+			var scop = objects.newScope(scope);
+			scop.setVar(arg, e.toString());
+			out = parse.ExpBlock(catchExp, scop);
+		}
+	}
+	return out;
 }
 
 parse.ForLoop = function(forloop, scope){

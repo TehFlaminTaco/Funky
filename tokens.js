@@ -4,7 +4,7 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
@@ -24,6 +24,9 @@ module.exports={
     "arg_list": "'\\(' arg_fill* '\\)'",
     "arg_fill": "assignment ','? | var ','?",
     "eval": "'eval' expression",
+    "tryblock": "'try' exporblock trycatch?",
+    "trycatch": "'catch' catch_name exporblock",
+    "catch_name": "'\\('? var '\\)'?",
     "forloop": "'for' var? 'in' expression exporblock | 'for' '\\('? program_1{,3} '\\)'? exporblock",
     "ifblock": "'if' expression exporblock elif?",
     "elif": "'else' exporblock",
@@ -130,6 +133,17 @@ module.exports={
       ]
     ],
     "expression": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "tryblock"
+        }
+      ],
       [
         {
           "prefix": false,
@@ -1127,6 +1141,99 @@ module.exports={
           ],
           "type": "token",
           "text": "expression"
+        }
+      ]
+    ],
+    "tryblock": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "try"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "exporblock"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "token",
+          "text": "trycatch"
+        }
+      ]
+    ],
+    "trycatch": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "catch"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "catch_name"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "exporblock"
+        }
+      ]
+    ],
+    "catch_name": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "regex",
+          "text": "\\("
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "var"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "regex",
+          "text": "\\)"
         }
       ]
     ],
