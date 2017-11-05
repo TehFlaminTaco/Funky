@@ -175,6 +175,39 @@ globals.later = function(time, callback){
 }
 
 /**
+ * Try to run a function. Returns {bsuccess, result/errorcode}
+ * @global
+ * @function
+ * @name pcall
+ * @param {function} tocall - The function to try to execute.
+ * @param {...*} arguments - The arguments to call on the function.
+ * @returns {Object} data - An object contain whether or not the execution was successful and the return value / error message.
+ */
+globals.pcall = function(func,...args){
+	var out = objects.newList()
+	try{
+		out.vars[1] = func(...args)
+		out.vars[0] = true;
+		return out;
+	}catch(e){
+		out.vars[0] = false;
+		out.vars[1] = e.toString()
+		return out;
+	}
+}
+
+/**
+ * Throw an error with a giving string as the text.
+ * @global
+ * @function
+ * @name error
+ * @param {string} [text] - The string to error. 
+ */
+globals.error = function(str){
+	throw(str||"");
+}
+
+/**
  * Returns the metafunction of a given name of an input value.
  * @global
  * @function
@@ -234,7 +267,8 @@ objects.getMetaFunc = globals.getMetaFunc;
 ///////////////////////////////////////
 /**
  * The Math Library.
- * @namespace math
+ * @class math
+ * @type {Object}
  */
 globals.math = objects.newList();
 var math = globals.math.vars;
@@ -243,6 +277,7 @@ var math = globals.math.vars;
 // Constants
 /**
  * 3.141562...
+ * @name math.pi
  * @constant
  * @type number
  * @default 3.141592653589793
@@ -357,7 +392,7 @@ math.rad = a=>a/180*Math.PI
 /**
  * The string library.
  * Strings also use this as a parent.
- * @namespace string
+ * @class string
  */
 globals.string = objects.newList();
 var string = globals.string.vars;
@@ -462,7 +497,7 @@ string.gmatch = (s, regex)=>{
 //////////////
 /**
  * The IO library. Gets inputs, makes outputs.
- * @namespace io
+ * @class io
  */
 globals.io = objects.newList();
 var io = globals.io.vars
@@ -492,7 +527,7 @@ io.read = function(method){
 /////////////////
 /**
  * The Table library. Objects are defautly parented to this.
- * @namespace table
+ * @class table
  */
 globals.table = objects.newList();
 var table = globals.table.vars
