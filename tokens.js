@@ -1,5 +1,5 @@
 module.exports={
-  "valid": true,
+  "valid": false,
   "raw": {
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
@@ -16,14 +16,14 @@ module.exports={
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
     "call": "expression: '\\(' call_1* '\\)'",
     "call_1": "splat_call ','? | expression ','?",
-    "splat_call": "'...' expression",
+    "splat_call": "'\\.\\.\\.' expression",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
     "local": "'local' | 'var'",
     "index": "'\\[' expression '\\]' | '\\.' '[a-zA-Z_]\\w*' | '::' '[a-zA-Z_]\\w*'",
     "function_builder": "function var? arg_list exporblock | function var exporblock | arg_list '=>' exporblock | var '=>' exporblock",
     "function": "'func' 'tion'?",
     "arg_list": "'\\(' arg_fill* splat_arg? '\\)'",
-    "splat_arg": "'...' var",
+    "splat_arg": "'\\.\\.\\.' var",
     "arg_fill": "assignment ','? | var ','?",
     "eval": "'eval' expression",
     "tryblock": "'try' exporblock trycatch?",
