@@ -615,8 +615,8 @@ parse.Call = function(call, scope){
 			var splat = args[i].data[0].items[0];
 			var val = parse.Expression(splat.data[1].items[0], scope);
 			if(val && typeof(val)=="object" && val.vars!==undefined){
-				for(var i=0; val.vars[i]!==undefined; i++){
-					parsedArgs.push(val.vars[i])
+				for(var c=0; val.vars[c]!==undefined; c++){
+					parsedArgs.push(val.vars[c])
 				}
 			}
 		}

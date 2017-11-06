@@ -1,5 +1,5 @@
 module.exports={
-  "valid": false,
+  "valid": true,
   "raw": {
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
@@ -794,7 +794,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "..."
+          "text": "\\.\\.\\."
         },
         {
           "prefix": false,
@@ -1142,7 +1142,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "..."
+          "text": "\\.\\.\\."
         },
         {
           "prefix": false,
