@@ -1,7 +1,5 @@
 const parse = module.exports;
-/** @requires objects.js */
 const objects = require("./objects.js");
-/** @requires globalScope.js */
 const globals = require("./globalScope.js");
 const tokenizer = require("./tokenizer.js");
 
