@@ -303,6 +303,7 @@ parse.Function = function(func, scope){
 	// Shorthand function. Rather consistent form.
 	if(func.data[0].name == "var" || func.data[0].name == "arg_list"){
 		var vList = [];
+		var splatHolder;
 		if(func.data[0].name == "var"){
 			vList[0] = parse.Var(func.data[0].items[0], arglistScope);
 		}else{
@@ -318,6 +319,9 @@ parse.Function = function(func, scope){
 				}
 				vList.push(sub_v_parsed);
 			}
+			if(func.data[0].items[0].data[2].count){
+				splatHolder = parse.Var(func.data[0].items[0].data[2].items[0].data[1].items[0],arglistScope)
+			}
 		}
 		var toDo = func.data[2].items[0].data[0].items[0];
 		//console.log(toDo);
@@ -325,10 +329,17 @@ parse.Function = function(func, scope){
 			var tmpScope = objects.newScope(expScope);
 			var curArguments = (func.scope || tmpScope).vars.arguments;
 			(func.scope || tmpScope).vars.arguments = objects.newList()
+			var res = objects.newList();
+			var resI = 0;
 			for(var i=0; i < arguments.length; i++){
 				(func.scope || tmpScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
+				else
+					res.vars[resI++] = arguments[i];
+			}
+			if(splatHolder){
+				splatHolder.setter(res);
 			}
 			for(var i=arguments.length+1; i<vList.length; i++){
 				vList[i].setter(undefined)
@@ -354,6 +365,7 @@ parse.Function = function(func, scope){
 	}else{
 		var action;
 		var vList = [];
+		var splatHolder;
 		var named = false;
 		var name = false;
 		// A potentially named function.
@@ -372,6 +384,10 @@ parse.Function = function(func, scope){
 				}
 				vList.push(sub_v_parsed);
 			}
+			console.log("!")
+			if(func.data[2].items[0].data[2].count){
+				splatHolder = parse.Var(func.data[2].items[0].data[2].items[0].data[1].items[0],arglistScope)
+			}
 
 			if(named)
 				name = parse.Var(func.data[1].items[0], scope)
@@ -389,10 +405,17 @@ parse.Function = function(func, scope){
 			var tmpScope = objects.newScope(expScope);
 			var curArguments = (func.scope || tmpScope).vars.arguments;
 			(func.scope || tmpScope).vars.arguments = objects.newList()
+			var res = objects.newList();
+			var resI = 0;
 			for(var i=0; i < arguments.length; i++){
 				(func.scope || tmpScope).vars.arguments.vars[i] = arguments[i]
 				if(vList[i])
 					vList[i].setter(arguments[i])
+				else
+					res.vars[resI++] = arguments[i];
+			}
+			if(splatHolder){
+				splatHolder.setter(res);
 			}
 			for(var i=arguments.length; i<vList.length; i++){
 				vList[i].setter(undefined)
@@ -586,8 +609,18 @@ parse.Call = function(call, scope){
 	var args = call.data[2].items;
 	var parsedArgs = [];
 	for(var i=0; i < args.length; i++){
-		var val = parse.Expression(args[i].data[0].items[0], scope);
-		parsedArgs.push(val);
+		if(args[i].data[0].name=="expression"){
+			var val = parse.Expression(args[i].data[0].items[0], scope);
+			parsedArgs.push(val);
+		}else{
+			var splat = args[i].data[0].items[0];
+			var val = parse.Expression(splat.data[1].items[0], scope);
+			if(val && typeof(val)=="object" && val.vars!==undefined){
+				for(var i=0; val.vars[i]!==undefined; i++){
+					parsedArgs.push(val.vars[i])
+				}
+			}
+		}
 	}
 	if(typeof globals.vars.getMetaFunc(toCall, "_call") == "function"){
 		return globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));

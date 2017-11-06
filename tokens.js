@@ -15,13 +15,15 @@ module.exports={
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
     "call": "expression: '\\(' call_1* '\\)'",
-    "call_1": "expression ','?",
+    "call_1": "splat_call ','? | expression ','?",
+    "splat_call": "'...' expression",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
     "local": "'local' | 'var'",
     "index": "'\\[' expression '\\]' | '\\.' '[a-zA-Z_]\\w*' | '::' '[a-zA-Z_]\\w*'",
     "function_builder": "function var? arg_list exporblock | function var exporblock | arg_list '=>' exporblock | var '=>' exporblock",
     "function": "'func' 'tion'?",
-    "arg_list": "'\\(' arg_fill* '\\)'",
+    "arg_list": "'\\(' arg_fill* splat_arg? '\\)'",
+    "splat_arg": "'...' var",
     "arg_fill": "assignment ','? | var ','?",
     "eval": "'eval' expression",
     "tryblock": "'try' exporblock trycatch?",
@@ -750,6 +752,26 @@ module.exports={
             1
           ],
           "type": "token",
+          "text": "splat_call"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "regex",
+          "text": ","
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
           "text": "expression"
         },
         {
@@ -760,6 +782,28 @@ module.exports={
           ],
           "type": "regex",
           "text": ","
+        }
+      ]
+    ],
+    "splat_call": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "..."
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
         }
       ]
     ],
@@ -1072,11 +1116,42 @@ module.exports={
         {
           "prefix": false,
           "count": [
+            0,
+            1
+          ],
+          "type": "token",
+          "text": "splat_arg"
+        },
+        {
+          "prefix": false,
+          "count": [
             1,
             1
           ],
           "type": "regex",
           "text": "\\)"
+        }
+      ]
+    ],
+    "splat_arg": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "..."
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "var"
         }
       ]
     ],
