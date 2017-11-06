@@ -384,7 +384,6 @@ parse.Function = function(func, scope){
 				}
 				vList.push(sub_v_parsed);
 			}
-			console.log("!")
 			if(func.data[2].items[0].data[2].count){
 				splatHolder = parse.Var(func.data[2].items[0].data[2].items[0].data[1].items[0],arglistScope)
 			}
