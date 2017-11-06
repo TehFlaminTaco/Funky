@@ -11,6 +11,7 @@ module.exports = function(globals){
 
     /**
      * @function
+     * @memberof io
      * @see write
      */
     io.write = function(){
@@ -23,6 +24,7 @@ module.exports = function(globals){
     /**
      * Read a line from STDIN
      * @function
+     * @memberof io
      * @returns {string} line - The next line of STDIN.
      */
     io.read = function(method){

@@ -16,6 +16,7 @@ module.exports = function(globals){
      * @constant
      * @type number
      * @default 3.141592653589793
+     * @memberof math
      */
     math.pi = Math.PI
     /**
@@ -23,6 +24,7 @@ module.exports = function(globals){
      * @constant
      * @type number
      * @default 2.7182818284590455
+     * @memberof math
      */
     math.e = Math.exp(1)
 
@@ -32,6 +34,7 @@ module.exports = function(globals){
      * @function
      * @param {number} n - The number to square root.
      * @returns {number} sqrt_n - The square root of n.
+     * @memberof math
      */ 
     math.sqrt = Math.sqrt
     /**
@@ -40,6 +43,7 @@ module.exports = function(globals){
      * @param n - The number to round
      * @param e - The power of 10 to round to.
      * @returns i - The rounded number.
+     * @memberof math
      */
     math.round = (a,b)=>Math.round(a*10**(b||0))/10**(b||0)
     /**
@@ -48,6 +52,7 @@ module.exports = function(globals){
      * @param n - The number to round
      * @param e - The power of 10 to round to.
      * @returns i - The rounded number.
+     * @memberof math
      */
     math.floor = (a,b)=>Math.floor(a*10**(b||0))/10**(b||0)
     /**
@@ -56,6 +61,7 @@ module.exports = function(globals){
      * @param n - The number to round
      * @param e - The power of 10 to round to.
      * @returns i - The rounded number.
+     * @memberof math
      */
     math.ceil  = (a,b)=>Math.ceil (a*10**(b||0))/10**(b||0)
     /**
@@ -63,6 +69,7 @@ module.exports = function(globals){
      * @function
      * @param {...number} n - The numbers to compare.
      * @returns {number} max - The largest of n.
+     * @memberof math
      */
     math.max = Math.max
     /**
@@ -70,6 +77,7 @@ module.exports = function(globals){
      * @function
      * @param {...number} n - The numbers to compare.
      * @returns {number} max - The smallest of n.
+     * @memberof math
      */
     math.min = Math.min
     /**
@@ -79,6 +87,7 @@ module.exports = function(globals){
      * @param {number} b - The minimum
      * @param {number} c - The maximum
      * @returns {number} n - The clamped number.
+     * @memberof math
      */
     math.clamp = (a,b,c)=>[a,b,c].sort()[1]
     /**
@@ -87,6 +96,7 @@ module.exports = function(globals){
      * @param {number} base - The base of the log
      * @param {number} [val] - The value to effect.
      * @returns {number} n - The resulting exponant.
+     * @memberof math
      */
     math.log = (a,b)=>typeof(b)=="number"?(Math.log(b)/Math.log(a)):Math.log(a)
     /**
@@ -95,6 +105,7 @@ module.exports = function(globals){
      * @param {number} [min] - The minimum limit of the random.
      * @param {number} [max] - The maximum limit of the random.
      * @returns {number} val - The random value.
+     * @memberof math
      */
     math.random = (a,b)=>typeof(b)=="number"?
                     Math.round(Math.random()*(b-a)+a):
@@ -104,21 +115,37 @@ module.exports = function(globals){
 
     // Trig
     /** @todo write documentation for Trig functions */
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.sin = a=>Math.sin(a)
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.cos = a=>Math.cos(a)
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.tan = a=>Math.tan(a)
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.asin = a=>Math.asin(a)
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.acos = a=>Math.acos(a)
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.atan = (a,b)=>typeof(b)=="number"?Math.atan2(a,b):Math.atan(a)
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.deg = a=>a/Math.PI*180
-    /** @function */
+    /** @function
+     * @memberof math
+     */
     math.rad = a=>a/180*Math.PI
     return mathObj;
 }

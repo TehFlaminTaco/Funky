@@ -13,6 +13,7 @@ module.exports = function(globals){
     /**
      * Use a string as a template for a bunch of other strings.
      * @function
+     * @memberof string
      * @param {string} format - The format template to use.
      * @param {...*} arguments - Objects to apply to the template.
      * @returns {string} formatted - The formatted string.
@@ -49,30 +50,37 @@ module.exports = function(globals){
     // Basic Manipulation
     /**
      * @function
+     * @memberof string
      * @param {string} string - The string to repeat
      * @param {number} count - The amount of times to repeat the string.
      * @return {string} repeated - The string repeated.
      */
     string.rep = (s,n)=>s.repeat(Math.max(n,0))
     /** @todo document these functions (My laziness knows no bounds) */
-    /** @function */
+    /** @function
+     * @memberof string */
     string.reverse = s=>s.split("").reverse().join("")
     string.lower = s=>s.toLowerCase()
-    /** @function */
+    /** @function
+     * @memberof string */
     string.upper = s=>s.toUpperCase()
-    /** @function */
+    /** @function
+     * @memberof string */
     string.sub = (s,a,b)=> s.substring(a,b)
 
     // Character Code Stuff
-    /** @function */
+    /** @function
+     * @memberof string */
     string.byte = s=>s.charCodeAt(0)
-    /** @function */
+    /** @function
+     * @memberof string */
     string.char = s=>String.fromCharCode(s)
 
     // Regex stuff
     /**
      * Replace all instances of needle in haystack with replace. Replace may be a function.
      * @function
+     * @memberof string
      * @param {string} haystack - The string to search through.
      * @param {string} needle - The regex to match.
      * @param {string|function} replace - The value to replace with. If a function, passes a match object and uses its return value.
@@ -82,6 +90,7 @@ module.exports = function(globals){
     /**
      * Determine if a needle matches a haystack, and if it does, return a match object.
      * @function
+     * @memberof string
      * @param {string} hastack - The string to search through.
      * @param {string} needle - The regex to match.
      * @returns {object} matchobject - An object containing the match information or undefined.
@@ -90,6 +99,7 @@ module.exports = function(globals){
     /**
      * Build an iterator from a needle and haystack. Each iteration returns the next match.
      * @function
+     * @memberof string
      * @param {string} hastack - The string to search through.
      * @param {string} needle - The regex to match.
      * @returns {function} iterator - The iterator function.

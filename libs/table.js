@@ -11,6 +11,7 @@ module.exports = function(globals){
     /**
      * Get the value of an object, ignoring metamethods and similar.
      * @function
+     * @memberof table
      * @param {Object} table - The object to look in.
      * @param {string} key - The key to use.
      * @returns {*} value - The value of table[key].
@@ -21,6 +22,7 @@ module.exports = function(globals){
     /**
      * Set the key of an object to a value, ingoring metamethods and events.
      * @function
+     * @memberof table
      * @param {Object} table - The object to modify
      * @param {string} key - The key to use.
      * @param {*} value - The value to set table[key] to.
@@ -32,6 +34,7 @@ module.exports = function(globals){
     /**
      * Use a table as the arguments to a function.
      * @function
+     * @memberof table
      * @param {Object} table - The object to use.
      * @param {function} func - The function to apply to.
      * @returns {*} val - The return value of the function call.
@@ -46,6 +49,7 @@ module.exports = function(globals){
     /**
      * Return an object with all numbered keys in reversed order to the input.
      * @function
+     * @memberof table
      * @param {Object} table - The object to reverse.
      * @returns {Object} reversed - The reversed object.
      */
@@ -61,6 +65,7 @@ module.exports = function(globals){
     /**
      * Insert a value into a table.
      * @function
+     * @memberof table
      * @param {Object} table - The table to modify.
      * @param {number} [index] - Where to insert the new value. Defaults to the end of the table.
      * @param {*} val - The value to insert.
@@ -83,12 +88,14 @@ module.exports = function(globals){
     }
     /** 
      * @function
+     * @memberof table
      * @see table.insert
      */
     table.push = table.insert
     /**
      * Remove a value from an object at a particular index, moving entires after it to fit.
      * @function
+     * @memberof table
      * @param {Object} table - The object to modify.
      * @param {number} [index] - The index of the table to remove. Defaults to the last value of the table.
      * @returns {*} popped - The value removed from the table.
@@ -107,6 +114,7 @@ module.exports = function(globals){
     }
     /**
      * @function
+     * @memberof table
      * @see table.remove
      */
     table.pop = table.remove
@@ -114,11 +122,13 @@ module.exports = function(globals){
     /**
      * Get the size of an object.
      * @function
+     * @memberof table
      */
     table.len = t=>math.len(t)
     /**
      * Rotate an object, preserves all elements.
      * @function
+     * @memberof table
      * @param {Object} table - The object to rotate.
      * @param {number} [n=1] - The amount to rotate. May be negative, defaults to 1.
      * @returns {Object} table - The now modified input table.
@@ -140,6 +150,7 @@ module.exports = function(globals){
      * Append a table to the end of another.
      * Non-objects will be implicitly wrapped in an object.
      * @function
+     * @memberof table
      * @param {Object|*} target - The object to append elements to.
      * @param {Object|*} source - The object in which to get elements from.
      * @returns {Object} combined - All of target's elements, followed by source's elements. Modifies target.
@@ -164,6 +175,7 @@ module.exports = function(globals){
     /**
      * Replace all elements of target with elements of source where source has elements.
      * @function
+     * @memberof table
      * @param {Object} target - The target object.
      * @param {Object} source - Where to copy elements from.
      * @returns {Object} target - The now modified input.
@@ -175,7 +187,8 @@ module.exports = function(globals){
         return t;
     }
 
-    /** @function */
+    /** @function
+     * @memberof table */
     table.clone = function(t){
         var newT = objects.newList()
         for(var name in t.vars){
@@ -191,6 +204,7 @@ module.exports = function(globals){
     /**
      * Create a clone of an object, applying a function to all entries.
      * @function
+     * @memberof table
      * @param {Object} table - The table to clone
      * @param {function} mapping - The function to map over.
      * @returns {Object} modified - The mapped table.
@@ -203,7 +217,8 @@ module.exports = function(globals){
         return newT
     }
 
-    /** @function */
+    /** @function
+     * @memberof table */
     table.sublist = function(t,ind,len){
         ind = ind || 0;
         len = len || math.len(t)-ind;
@@ -215,7 +230,8 @@ module.exports = function(globals){
         return outList;
     }
 
-    /** @function */
+    /** @function
+     * @memberof table */
     table.sort = function(t,f){
         var t_len = math.len(t);
         var pivot = Math.floor(Math.random()*t_len)
@@ -241,7 +257,8 @@ module.exports = function(globals){
         return table.add(table.add(left, pivotVal),right)
     }
 
-    /** @function */
+    /** @function
+     * @memberof table */
     table.reduce = function(t, f){
         var o = t.vars[0]
         var tl = math.len(t);
@@ -251,7 +268,8 @@ module.exports = function(globals){
         return o;
     }
 
-    /** @function */
+    /** @function
+     * @memberof table */
     table.fold = function(t, f){
         var o = objects.newList();
         var tl = math.len(t);
@@ -261,7 +279,8 @@ module.exports = function(globals){
         return o;
     }
 
-    /** @function */
+    /** @function
+     * @memberof table */
     table.cumulate = function(t, f){
         var o = objects.newList();
         var v = t.vars[0];
