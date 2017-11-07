@@ -18,9 +18,9 @@ globals.defaultMeta.vars.string = objects.newList();
 globals.defaultMeta.vars.string.vars._index = globals.string;
 globals.defaultMeta.vars.string.vars._mod = (a,b)=>{
 	if(typeof(b)=="object"){
-		return table.apply(table.add(a, b), string.format)
+		return table.apply(table.add(a, b), globals.string.vars.format)
 	}else{
-		return string.format(a, b)
+		return globals.string.vars..format(a, b)
 	}
 }
 globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"&&typeof(b)=="number"?
