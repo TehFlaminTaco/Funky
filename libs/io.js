@@ -1,5 +1,5 @@
 const stdin = require("../stdin.js");
-const stdinreader = stdin(process.stdin.fd)
+const stdinreader = stdin(process?process.stdin.fd:-1)
 const fs = require("fs");
 module.exports = function(globals){
     var objects = require("../objects.js");
