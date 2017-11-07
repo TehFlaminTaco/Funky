@@ -7,6 +7,7 @@ module.exports = function(globals){
     var tableObj = objects.newList();
     var table = tableObj.vars;
     module.exports = ()=>tableObj;
+    var math = globals.math.vars;
 
     /**
      * Get the value of an object, ignoring metamethods and similar.
