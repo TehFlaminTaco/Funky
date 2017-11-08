@@ -509,6 +509,13 @@ parse.ForLoop = function(forloop, scope){
 			}
 			return lastOut
 		}
+		if(typeof iter == "string"){
+			for(var i=0; i < iter.length; i++){
+				v.setter(iter[i]);
+				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope);
+			}
+			return lastOut;
+		}
 		if(typeof iter != "function")
 			return;
 		var val;
@@ -603,21 +610,33 @@ parse.Crementor = function(cre, scope){
 
 parse.Call = function(call, scope){
 	var toCall = parse.Expression(call.data[0].items[0], scope);
-	var args = call.data[2].items;
 	var parsedArgs = [];
-	for(var i=0; i < args.length; i++){
-		if(args[i].data[0].name=="expression"){
-			var val = parse.Expression(args[i].data[0].items[0], scope);
-			parsedArgs.push(val);
-		}else{
-			var splat = args[i].data[0].items[0];
-			var val = parse.Expression(splat.data[1].items[0], scope);
-			if(val && typeof(val)=="object" && val.vars!==undefined){
-				for(var c=0; val.vars[c]!==undefined; c++){
-					parsedArgs.push(val.vars[c])
+	var argType = (call.data[2]||call.data[1]).name;
+	if(argType == "call_1"){
+		var args = call.data[2].items;
+		for(var i=0; i < args.length; i++){
+			if(args[i].data[0].name=="expression"){
+				var val = parse.Expression(args[i].data[0].items[0], scope);
+				parsedArgs.push(val);
+			}else{
+				var splat = args[i].data[0].items[0];
+				var val = parse.Expression(splat.data[1].items[0], scope);
+				if(val && typeof(val)=="object" && val.vars!==undefined){
+					for(var c=0; val.vars[c]!==undefined; c++){
+						parsedArgs.push(val.vars[c])
+					}
 				}
 			}
 		}
+	}else if(argType == "stringconstant" || argType == "tableconstant"){
+		parsedArgs[0] = parse.Constant(call.data[1].items[0], scope)
+	}else if(argType == "splat_call"){
+		var args = parse.Expression(call.data[1].items[0].data[1].items[0], scope)
+		for(var c=0; args.vars[c]!==undefined; c++){
+			parsedArgs.push(args.vars[c])
+		}
+	}else{
+		throw `unknown call method: ${argType}`
 	}
 	if(typeof globals.vars.getMetaFunc(toCall, "_call") == "function"){
 		return globals.vars.getMetaFunc(toCall, "_call").apply(toCall, [toCall].concat(parsedArgs));

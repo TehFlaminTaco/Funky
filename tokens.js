@@ -14,7 +14,7 @@ module.exports={
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
-    "call": "expression: '\\(' call_1* '\\)'",
+    "call": "expression: '\\(' call_1* '\\)' | expression: stringconstant | expression: tableconstant | expression: splat_call",
     "call_1": "splat_call ','? | expression ','?",
     "splat_call": "'\\.\\.\\.' expression",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
@@ -740,6 +740,66 @@ module.exports={
           ],
           "type": "regex",
           "text": "\\)"
+        }
+      ],
+      [
+        {
+          "prefix": true,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "stringconstant"
+        }
+      ],
+      [
+        {
+          "prefix": true,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "tableconstant"
+        }
+      ],
+      [
+        {
+          "prefix": true,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "splat_call"
         }
       ]
     ],
@@ -2471,6 +2531,66 @@ module.exports={
             ],
             "type": "regex",
             "text": "\\)"
+          }
+        ],
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "stringconstant"
+          }
+        ],
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "tableconstant"
+          }
+        ],
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "splat_call"
           }
         ]
       ],

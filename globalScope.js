@@ -18,14 +18,14 @@ globals.defaultMeta.vars.string = objects.newList();
 globals.defaultMeta.vars.string.vars._index = globals.string;
 globals.defaultMeta.vars.string.vars._mod = (a,b)=>{
 	if(typeof(b)=="object"){
-		return table.apply(table.add(a, b), globals.string.vars.format)
+		return globals.table.vars.apply(globals.table.vars.add(a, b), globals.string.vars.format)
 	}else{
 		return globals.string.vars.format(a, b)
 	}
 }
 globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"&&typeof(b)=="number"?
-								   string.rep(a,b) :typeof(a)=="number"&&typeof(b)=="string"?
-								   string.rep(b,a) :undefined;
+								   globals.string.vars.rep(a,b) :typeof(a)=="number"&&typeof(b)=="string"?
+								   globals.string.vars.rep(b,a) :undefined;
 
 globals.defaultMeta.vars.object = objects.newList();
 globals.defaultMeta.vars.object.vars._index = globals.table;

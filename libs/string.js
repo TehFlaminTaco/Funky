@@ -107,11 +107,23 @@ module.exports = function(globals){
     string.gmatch = (s, regex)=>{
         var reg = new RegExp(regex,"g");
         return ()=>{
-            var oot = objects.ListFromObject(reg.exec(s));
-            if(oot.vars.index!=undefined){
-                return oot
+            var next = reg.exec(s);
+            if(next){
+                var oot = objects.ListFromObject(next);
+                if(oot && oot.vars.index!=undefined){
+                    return oot
+                }
             }
         }
     }
+    /**
+     * Split a string by a regex.
+     * @function
+     * @memberof string
+     * @param {string} s 
+     * @param {string} regex 
+     * @returns {object} list - The split string.
+     */
+    string.split = (s, regex)=>objects.ListFromObject(s.split(regex));
     return stringObj;
 }
