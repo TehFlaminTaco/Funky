@@ -129,17 +129,22 @@ globals.vars.math.vars.gt = (a,b)=>a>b;
 globals.vars.math.vars.eq = (a,b)=>a==b;
 globals.vars.math.vars.ne = (a,b)=>a!=b;
 
+parse.UnOperator = function(name, l){
+	var func = globals.vars.math.getVar(name)
+	if(!func)
+		throw new Error("Unknown operator: "+name)
+	if(globals.vars.getMetaFunc(l, "_"+name)){
+		var v = globals.vars.getMetaFunc(l, "_"+name)(l)
+		return v===undefined ? func(l) : v
+	}
+	return func(l)
+}
+
 parse.UnaryArithmatic = function(arith, scope){
 	var l = arith.data[1].items[0];
 	l = parse.Expression(l, scope);
-	var func = globals.vars.math.getVar(arith.data[0].items[0].data[0].name)
-	if(!func)
-		throw new Error("Unknown operator: "+arith.data[0].items[0].data[0].name)
-	if(globals.vars.getMetaFunc(l, "_"+arith.data[1].items[0].data[0].name)){
-		var v = globals.vars.getMetaFunc(l, "_"+arith.data[1].items[0].data[0].name)(l)
-		return v===undefined ? func(l) : v
-	}
-	return func(l);
+	
+	return parse.UnOperator(arith.data[0].items[0].data[0].name, l);
 }
 globals.vars.math.vars.not = a=>!a;
 globals.vars.math.vars.len = a=>{
@@ -462,10 +467,22 @@ parse.IsEvent = function(is, scope){
 }
 
 parse.Deop = function(expBlock, scope){
-	var op = expBlock.data[1].items[0].data[0].items[0].name;
-	func = (a,b)=>parse.Operator(op,a,b);
-	func.stringify = expBlock.text;
-	return func;
+	var tp = expBlock.data[1].name
+	if(tp == "operator"){
+		var op = expBlock.data[1].items[0].data[0].items[0].name;
+		func = (a,b)=>parse.Operator(op,a,b);
+		func.stringify = expBlock.text;
+		return func;
+	}else if(tp == "unoperator"){
+		var op = expBlock.data[1].items[0].data[0].items[0].name;
+		func = a=>parse.UnOperator(op,a);
+		func.stringify = expBlock.text;
+		return func;
+	}else if(tp == "expression"){
+		func = a=>parse.Expression(expBlock.data[1].items[0], scope);
+		func.stringify = expBlock.text;
+		return func;
+	}
 }
 
 parse.ExpBlock = function(expBlock, scope){
@@ -630,6 +647,8 @@ parse.Call = function(call, scope){
 		}
 	}else if(argType == "stringconstant" || argType == "tableconstant"){
 		parsedArgs[0] = parse.Constant(call.data[1].items[0], scope)
+	}else if(argType == "deop"){
+		parsedArgs[0] = parse.Deop(call.data[1].items[0], scope);
 	}else if(argType == "splat_call"){
 		var args = parse.Expression(call.data[1].items[0].data[1].items[0], scope)
 		for(var c=0; args.vars[c]!==undefined; c++){

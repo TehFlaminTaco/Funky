@@ -14,7 +14,7 @@ module.exports={
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
-    "call": "expression: '\\(' call_1* '\\)' | expression: stringconstant | expression: tableconstant | expression: splat_call",
+    "call": "expression: '\\(' call_1* '\\)' | expression: stringconstant | expression: tableconstant | expression: splat_call | expression: deop",
     "call_1": "splat_call ','? | expression ','?",
     "splat_call": "'\\.\\.\\.' expression",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
@@ -37,7 +37,7 @@ module.exports={
     "ternary": "expression: '\\?' expression elset",
     "elset": "':' expression",
     "is": "var 'is' '\\*' | var 'is' expression",
-    "deop": "'@' operator",
+    "deop": "'@' operator | '@' unoperator | '@' expression",
     "arithmatic": "expression: operator expression",
     "unaryarithmatic": "unoperator expression",
     "operator": "add | sub | mult | intdiv | div | pow | mod | and | or | concat | bitor | bitand | bitxor | bitshiftl | bitshiftr | le | lt | ge | gt | eq | ne",
@@ -800,6 +800,26 @@ module.exports={
           ],
           "type": "token",
           "text": "splat_call"
+        }
+      ],
+      [
+        {
+          "prefix": true,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "deop"
         }
       ]
     ],
@@ -1734,6 +1754,46 @@ module.exports={
           "type": "token",
           "text": "operator"
         }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "@"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "unoperator"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "@"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        }
       ]
     ],
     "arithmatic": [
@@ -2591,6 +2651,26 @@ module.exports={
             ],
             "type": "token",
             "text": "splat_call"
+          }
+        ],
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "deop"
           }
         ]
       ],
