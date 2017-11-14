@@ -1,4 +1,5 @@
 const parse = require("../parse.js");
+const objects = require("../objects.js");
 module.exports = function(globals){
     module.exports = globals;
     /**

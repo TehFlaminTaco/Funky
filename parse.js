@@ -568,7 +568,7 @@ parse.Eval = function(evl, scope){
 		return parse.Program(chnk, midScope);
 	}
 
-	fnk.stringify = evl.text;
+	fnk.stringify = str;
 	return fnk;
 }
 
