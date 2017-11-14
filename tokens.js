@@ -10,7 +10,7 @@ module.exports={
     "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
     "stringconstant": " '\"([^\\\\\"]|\\\\(.|[^a]))*\"' | \"'([^\\\\']|\\\\(.|[^a]))*'\"",
     "tableconstant": "'\\{' tablefill* '\\}'",
-    "tablefill": "var '=' expression ','? | constant '=' expression | expression ','?",
+    "tablefill": "var '=' expression ','? | constant '=' expression ','? | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
@@ -528,6 +528,15 @@ module.exports={
           ],
           "type": "token",
           "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "regex",
+          "text": ","
         }
       ],
       [
