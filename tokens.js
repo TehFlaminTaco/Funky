@@ -780,26 +780,6 @@ module.exports={
             1
           ],
           "type": "token",
-          "text": "tableconstant"
-        }
-      ],
-      [
-        {
-          "prefix": true,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
           "text": "splat_call"
         }
       ],
@@ -2636,26 +2616,6 @@ module.exports={
             ],
             "type": "token",
             "text": "stringconstant"
-          }
-        ],
-        [
-          {
-            "prefix": true,
-            "count": [
-              1,
-              1
-            ],
-            "type": "token",
-            "text": "expression"
-          },
-          {
-            "prefix": false,
-            "count": [
-              1,
-              1
-            ],
-            "type": "token",
-            "text": "tableconstant"
           }
         ],
         [
