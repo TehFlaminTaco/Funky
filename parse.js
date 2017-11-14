@@ -146,6 +146,8 @@ parse.UnaryArithmatic = function(arith, scope){
 	
 	return parse.UnOperator(arith.data[0].items[0].data[0].name, l);
 }
+
+globals.vars.math.vars.unm = a=>-a
 globals.vars.math.vars.not = a=>!a;
 globals.vars.math.vars.len = a=>{
 	if(typeof a == "string")

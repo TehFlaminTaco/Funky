@@ -14,7 +14,7 @@ module.exports={
     "paranexp": " '\\(' expression '\\)' ",
     "assignment": "expression: operator? '=' expression",
     "crementor": "expression: '\\+\\+' | '\\+\\+' expression | expression: '--' | '--' expression",
-    "call": "expression: '\\(' call_1* '\\)' | expression: stringconstant | expression: tableconstant | expression: splat_call | expression: deop",
+    "call": "expression: '\\(' call_1* '\\)' | expression: stringconstant | expression: splat_call | expression: deop",
     "call_1": "splat_call ','? | expression ','?",
     "splat_call": "'\\.\\.\\.' expression",
     "var": "expression: index | local? '[a-zA-Z_]\\w*'",
@@ -62,10 +62,11 @@ module.exports={
     "ge": "'>='",
     "eq": "'=='",
     "ne": "'!='",
-    "unoperator": "not | len | bitnot",
+    "unoperator": "unm | not | len | bitnot",
     "not": "'!'",
     "len": "'#'",
-    "bitnot": "'~'"
+    "bitnot": "'~'",
+    "unm": "'-'"
   },
   "compiled": {
     "program": [
@@ -2364,6 +2365,17 @@ module.exports={
             1
           ],
           "type": "token",
+          "text": "unm"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
           "text": "not"
         }
       ],
@@ -2426,6 +2438,19 @@ module.exports={
           ],
           "type": "regex",
           "text": "~"
+        }
+      ]
+    ],
+    "unm": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "-"
         }
       ]
     ]
