@@ -294,5 +294,39 @@ module.exports = function(globals){
         return o;
     }
 
+    /**
+     * Determine if a list contains an element and return the first index of it.
+     * @function
+     * @memberof table
+     * @param {Object} haystack
+     * @param {*} needle
+     * @returns {number|nil} index - The first index of the needle or nil.
+     */
+    table.find = function(tab, haystack){
+        for(var i=0; i < table.len(tab); i++){
+            if(tab.vars[i] == haystack){
+                return i;
+            }
+        }
+        return undefined;
+    }
+
+    /**
+     * Determine if a list contains an element and return the first index of it.
+     * @function
+     * @memberof table
+     * @param {Object} haystack
+     * @param {*} needle
+     * @returns {number|nil} index - The first index of the needle or nil.
+     */
+    table.findLast = function(tab, haystack){
+        for(var i=table.len(tab)-1; i >= 0; i--){
+            if(tab.vars[i] == haystack){
+                return i;
+            }
+        }
+        return undefined;
+    }
+
     return tableObj
 }

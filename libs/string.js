@@ -120,10 +120,41 @@ module.exports = function(globals){
      * Split a string by a regex.
      * @function
      * @memberof string
-     * @param {string} s 
-     * @param {string} regex 
+     * @param {string} haystack
+     * @param {string} needle
      * @returns {object} list - The split string.
      */
     string.split = (s, regex)=>objects.ListFromObject(s.split(regex));
+
+    /**
+     * Determine where a substring exists in a string and returns the first index of it.
+     * @function
+     * @memberof string
+     * @param {string} haystack
+     * @param {string} needle
+     * @returns {number|nil} index - The first index of the substring or nil.
+     */
+    string.find = (s, needle)=>{
+        var tar = s.indexOf(needle)
+        if(tar == -1)
+            return undefined
+        return tar
+    }
+
+    /**
+     * Determine where a substring exists in a string and returns the last index of it.
+     * @function
+     * @memberof string
+     * @param {string} haystack
+     * @param {string} needle
+     * @returns {number|nil} index - The last index of the substring or nil.
+     */
+    string.findLast = (s, needle)=>{
+        var tar = s.lastIndexOf(needle)
+        if(tar == -1)
+            return undefined
+        return tar
+    }
+
     return stringObj;
 }
