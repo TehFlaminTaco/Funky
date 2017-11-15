@@ -1,15 +1,17 @@
 const objects = require("./objects.js");
-
+const fs = require("fs");
 const globals = {};
 
 ////////////////////////
 // LOAD THE LIBRARIES //
 ////////////////////////
-require("./libs/global.js")(globals);
-globals.math = require("./libs/math.js")(globals);
-globals.string = require("./libs/string.js")(globals);
-globals.io = require("./libs/io.js")(globals);
-globals.table = require("./libs/table.js")(globals);
+var libs = fs.readdirSync("./libs")
+for(var id in libs){
+	var lib_name = libs[id].replace(/\.js$/,"")
+	globals[lib_name] = require("./libs/"+libs[id])(globals);
+}
+
+delete globals.globals; // We don't actually want this to be a lib.
 
 objects.getMetaFunc = globals.getMetaFunc;
 
