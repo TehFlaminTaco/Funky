@@ -56,15 +56,32 @@ parse.Expression = function(exp, scope){
 parse.Assignment = function(assign, scope, expscope){
 	var dat = assign.data;
 	var v = parse.Var(dat[0].items[0], scope);
-	var val = parse.Expression(dat[3].items[0], expscope || scope);
 	if(v){
 		if(dat[1].count){
+			var l = v.getter()
 			var op = dat[1].items[0].data[0].items[0].name
-			val = parse.Operator(op, v.getter(), val);
+			if(op == "and"){
+				if (l){
+					v.setter(parse.Expression(dat[3].items[0], expscope || scope))
+				}else{
+					v.setter(l)
+				}
+			}else if(op == "or"){
+				if (l){
+					v.setter(l)
+				}else{
+					v.setter(parse.Expression(dat[3].items[0], expscope || scope))
+				}
+			}else{
+				v.setter(parse.Operator(op, v.getter(), parse.Expression(dat[3].items[0], expscope || scope)));
+			}
+			return v.getter()
+		}else{
+			var val = parse.Expression(dat[3].items[0], expscope || scope);
+			v.setter(val);
+			return v.getter();
 		}
-		v.setter(val);
 	}
-	return val;
 }
 
 parse.Operator = function(name, l, r){
