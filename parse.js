@@ -520,11 +520,13 @@ parse.TryBlock = function(expBlock, scope){
 	}catch(e){
 		if(expBlock.data[2].count > 0){
 			var catcher = expBlock.data[2].items[0];
-			var arg = catcher.data[1].items[0].data[1].items[0].data[1].items[0]
 			var catchExp = catcher.data[2].items[0];
 			
 			var scop = objects.newScope(scope);
-			scop.setVar(arg, e.toString());
+			if(catcher.data[1].count){
+				var arg = catcher.data[1].items[0].data[1].items[0].data[1].items[0]
+				scop.setVar(arg, e.toString());
+			}
 			out = parse.ExpBlock(catchExp, scop);
 		}
 	}

@@ -27,7 +27,7 @@ module.exports={
     "arg_fill": "assignment ','? | var ','?",
     "eval": "'eval' expression",
     "tryblock": "'try' exporblock trycatch?",
-    "trycatch": "'catch' catch_name exporblock",
+    "trycatch": "'catch' catch_name? exporblock",
     "catch_name": "'\\('? var '\\)'?",
     "forloop": "'for' var? 'in' expression exporblock | 'for' '\\('? program_1{,3} '\\)'? exporblock",
     "ifblock": "'if' expression exporblock elif?",
