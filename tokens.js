@@ -48,8 +48,8 @@ module.exports={
     "intdiv": "'//'",
     "pow": "'\\^'",
     "mod": "'\\%'",
-    "and": "'and'",
-    "or": "'or'",
+    "and": "'and' | '&&'",
+    "or": "'or' | '\\|\\|'",
     "concat": "'\\.\\.'",
     "bitor": "'\\|'",
     "bitand": "'&'",
@@ -2174,6 +2174,17 @@ module.exports={
           "type": "regex",
           "text": "and"
         }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "&&"
+        }
       ]
     ],
     "or": [
@@ -2186,6 +2197,17 @@ module.exports={
           ],
           "type": "regex",
           "text": "or"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "\\|\\|"
         }
       ]
     ],
