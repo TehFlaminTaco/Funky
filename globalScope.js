@@ -5,7 +5,7 @@ const globals = {};
 ////////////////////////
 // LOAD THE LIBRARIES //
 ////////////////////////
-var libs = fs.readdirSync("./libs")
+var libs = fs.readdirSync(__dirname+"/libs")
 for(var id in libs){
 	var lib_name = libs[id].replace(/\.js$/,"")
 	globals[lib_name] = require("./libs/"+libs[id])(globals);
