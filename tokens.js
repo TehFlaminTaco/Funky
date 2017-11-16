@@ -1334,7 +1334,7 @@ module.exports={
         {
           "prefix": false,
           "count": [
-            1,
+            0,
             1
           ],
           "type": "token",
