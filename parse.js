@@ -191,9 +191,27 @@ parse.Constant = function(cons, scope){
 	var constyp = cons.name;
 	if(constyp == "numberconstant")
 		return Number(cons.data[0].items[0]);
-	if(constyp == "stringconstant")
-		return eval(cons.data[0].items[0]);
-	if(constyp == "tableconstant"){
+	if(constyp == "stringconstant"){
+		if(cons.data[0].name == "\\[(=*)\\[(?:.|[^a])*?\\]\\1\\]")
+			return cons.data[0].items[0].match(/\[(=*)\[((?:.|[^a])*?)\]\1\]/)[2]
+		else if(cons.data[0].name == "templatestring"){
+			var tmplt = cons.data[0].items[0];
+			var outStr = "";
+			if(tmplt.data[1].count){
+				outStr += eval('"'+tmplt.data[1].items[0].data[0].items[0].replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/[`"]/g,a=>a=='`'?'"':'`')+'"').replace(/[`"]/g,a=>a=='`'?'"':'`')
+			}
+			for(var i=0; i < tmplt.data[2].count; i++){
+				var chnk = tmplt.data[2].items[i];
+				var lit = chnk.data[0].items[0].data[1].items[0]
+				outStr += globals.vars.toString(parse.Expression(lit,scope))
+				if(chnk.data[1].count){
+					outStr += eval('"'+chnk.data[1].items[0].data[0].items[0].replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/[`"]/g,a=>a=='`'?'"':'`')+'"').replace(/[`"]/g,a=>a=='`'?'"':'`')
+				}
+			}
+			return outStr;
+		}else
+			return eval(cons.data[0].items[0].replace(/\r/g,"\\r").replace(/\n/g,"\\n"));
+	}if(constyp == "tableconstant"){
 		var t = objects.newList();
 		var toAppend = cons.data[1].items;
 		var curIndex = 0;

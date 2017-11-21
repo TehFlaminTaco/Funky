@@ -7,8 +7,14 @@ module.exports={
     "expression": "tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "constant": "numberconstant | stringconstant | tableconstant",
-    "numberconstant": "'-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)'",
-    "stringconstant": " '\"([^\\\\\"]|\\\\(.|[^a]))*\"' | \"'([^\\\\']|\\\\(.|[^a]))*'\"",
+    "numberconstant": "'-?(0(x[0-9A-Fa-f]+|b[01]+)|\\d*\\.\\d+(e\\d+)?|\\d+(e\\d+)?)'",
+    "stringconstant": " '\"([^\\\\\"]|\\\\(.|[^a]))*\"' | \"'([^\\\\']|\\\\(.|[^a]))*'\" | '\\[(=*)\\[(?:.|[^a])*?\\]\\1\\]' | templatestring",
+    "templatestring": " templatestring_start templatestring_chunk? templatestring_chunks* templatestring_end ",
+    "templatestring_start": " '`' ",
+    "templatestring_end": " '`' ",
+    "templatestring_chunk": " '([^`[\\\\]|\\\\(.|[^a]))*' ",
+    "templatestring_literal": " '\\[' expression '\\]' ",
+    "templatestring_chunks": "templatestring_literal templatestring_chunk?",
     "tableconstant": "'\\{' tablefill* '\\}'",
     "tablefill": "var '=' expression ','? | constant '=' expression ','? | expression ','?",
     "paranexp": " '\\(' expression '\\)' ",
@@ -403,7 +409,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "-?(0(b[01]+|x[0-9A-Fa-f]+)|\\d+(\\.\\d+)?)"
+          "text": "-?(0(x[0-9A-Fa-f]+|b[01]+)|\\d*\\.\\d+(e\\d+)?|\\d+(e\\d+)?)"
         }
       ]
     ],
@@ -428,6 +434,160 @@ module.exports={
           ],
           "type": "regex",
           "text": "'([^\\\\']|\\\\(.|[^a]))*'"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "\\[(=*)\\[(?:.|[^a])*?\\]\\1\\]"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "templatestring"
+        }
+      ]
+    ],
+    "templatestring": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "templatestring_start"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "token",
+          "text": "templatestring_chunk"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            -1
+          ],
+          "type": "token",
+          "text": "templatestring_chunks"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "templatestring_end"
+        }
+      ]
+    ],
+    "templatestring_start": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "`"
+        }
+      ]
+    ],
+    "templatestring_end": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "`"
+        }
+      ]
+    ],
+    "templatestring_chunk": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "([^`[\\\\]|\\\\(.|[^a]))*"
+        }
+      ]
+    ],
+    "templatestring_literal": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "\\["
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "\\]"
+        }
+      ]
+    ],
+    "templatestring_chunks": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "templatestring_literal"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "token",
+          "text": "templatestring_chunk"
         }
       ]
     ],
