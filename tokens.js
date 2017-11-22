@@ -13,7 +13,7 @@ module.exports={
     "templatestring_start": " '`' ",
     "templatestring_end": " '`' ",
     "templatestring_chunk": " '([^`[\\\\]|\\\\(.|[^a]))*' ",
-    "templatestring_literal": "@1 '\\[' expression '\\]' ",
+    "templatestring_literal": "@1 '\\[' expression+ '\\]' ",
     "templatestring_chunks": "templatestring_literal templatestring_chunk?",
     "tableconstant": "'\\{' tablefill* '\\}'",
     "tablefill": "var '=' expression ','? | constant '=' expression ','? | expression ','?",
@@ -571,7 +571,7 @@ module.exports={
           "prefix": false,
           "count": [
             1,
-            1
+            -1
           ],
           "type": "token",
           "text": "expression"

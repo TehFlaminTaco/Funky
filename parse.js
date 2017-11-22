@@ -202,8 +202,12 @@ parse.Constant = function(cons, scope){
 			}
 			for(var i=0; i < tmplt.data[2].count; i++){
 				var chnk = tmplt.data[2].items[i];
-				var lit = chnk.data[0].items[0].data[1].items[0]
-				outStr += globals.vars.toString(parse.Expression(lit,scope))
+				var exprs = chnk.data[0].items[0].data[1].items
+				var outVal = "";
+				for(var i=0;i<exprs.length;i++){
+					outVal = globals.vars.toString(parse.Expression(exprs[i],scope))
+				}
+				outStr += globals.vars.toString(outVal)
 				if(chnk.data[1].count){
 					outStr += eval('"'+chnk.data[1].items[0].data[0].items[0].replace(/\r/g,"\\r").replace(/\n/g,"\\n").replace(/[`"]/g,a=>a=='`'?'"':'`')+'"').replace(/[`"]/g,a=>a=='`'?'"':'`')
 				}
