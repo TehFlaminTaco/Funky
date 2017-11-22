@@ -204,7 +204,7 @@ parse.Constant = function(cons, scope){
 				var chnk = tmplt.data[2].items[i];
 				var exprs = chnk.data[0].items[0].data[1].items
 				var outVal = "";
-				for(var c=0;i<exprs.length;i++){
+				for(var c=0;c<exprs.length;c++){
 					outVal = globals.vars.toString(parse.Expression(exprs[c],scope))
 				}
 				outStr += globals.vars.toString(outVal)
