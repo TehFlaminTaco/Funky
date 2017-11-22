@@ -42,7 +42,7 @@ module.exports={
     "whenblock": "'when' expression exporblock",
     "ternary": "expression: '\\?' expression elset",
     "elset": "':' expression",
-    "is": "var 'is' '\\*' | var 'is' expression",
+    "is": "expression: 'is' '\\*' | expression: 'is' expression",
     "deop": "'@' operator | '@' unoperator | '@' expression",
     "arithmatic": "expression: operator expression",
     "unaryarithmatic": "unoperator expression",
@@ -1845,13 +1845,13 @@ module.exports={
     "is": [
       [
         {
-          "prefix": false,
+          "prefix": true,
           "count": [
             1,
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         },
         {
           "prefix": false,
@@ -1874,13 +1874,13 @@ module.exports={
       ],
       [
         {
-          "prefix": false,
+          "prefix": true,
           "count": [
             1,
             1
           ],
           "type": "token",
-          "text": "var"
+          "text": "expression"
         },
         {
           "prefix": false,
@@ -2947,6 +2947,66 @@ module.exports={
             ],
             "type": "token",
             "text": "elset"
+          }
+        ]
+      ],
+      "is": [
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "is"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "\\*"
+          }
+        ],
+        [
+          {
+            "prefix": true,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "regex",
+            "text": "is"
+          },
+          {
+            "prefix": false,
+            "count": [
+              1,
+              1
+            ],
+            "type": "token",
+            "text": "expression"
           }
         ]
       ],

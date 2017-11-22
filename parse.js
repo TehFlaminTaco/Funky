@@ -257,7 +257,7 @@ parse.Var = function(v, scope){
 				},
 				setter: function(val){
 					scope.defined[name] = true;
-					scope.vars[name] = val;
+					scope.setVar(name,val);
 					return val;
 				}
 			}
@@ -286,7 +286,6 @@ parse.Var = function(v, scope){
 		name = parse.Expression(ind.data[1].items[0], scope)
 	}
 	if(rootTab){
-		var m = objects.getMetaFunc()
 		if(typeof rootTab != "object" || !rootTab.vars)
 			return {
 				scope: rootTab,
@@ -315,7 +314,12 @@ parse.Var = function(v, scope){
 					return v;
 				},
 				setter: function(val){
-					rootTab[name] = val;
+					var m = objects.getMetaFunc(rootTab, "_newIndex")
+					if(m && typeof(m)=="function"){
+						m(rootTab,name,val);
+					}else{
+						rootTab[name] = val;
+					}
 				}
 			}
 		else
@@ -496,14 +500,15 @@ parse.WhenBlock = function(when, scope){
 }
 
 parse.IsEvent = function(is, scope){
-	var v = parse.Var(is.data[0].items[0], scope);
+	var v = parse.Var(is.data[0].items[0].data[0].items[0], scope);
 	var evnt = objects.newEvent();
-	if(v.scope)
+	if(v.scope){
 		v.scope.listeners.push(()=>{
 			if(is.data[2].name == '\\*' || v.getter() == parse.Expression(is.data[2].items[0], scope)){
 				evnt.vars.call();
 			}
 		})
+	}
 	return evnt;
 }
 
