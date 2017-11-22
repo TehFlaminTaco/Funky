@@ -33,7 +33,7 @@ objects.newScope = function(parent,isGlobal){
 	n.setVar = function(name, val, force){
 		if(force)
 			n.defined[name]=true;
-		if(n.parent && !n.parent.readOnly && n.vars[name]===undefined)
+		if(n.parent && !n.parent.readOnly && n.vars[name]===undefined && !n.defined[name])
 			return n.parent.setVar(name, val)
 		var m = objects.getMetaFunc(n, "_newindex");
 		if(m){
