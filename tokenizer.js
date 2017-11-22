@@ -75,6 +75,10 @@ if(!tokens.valid || !tokens.compiled){
 		var tkn = raw[name];
 		var option = [];
 		var options = [];
+		if(tkn[0]=="@"){
+			options.push({"prefix": false,"count": [0,0],"type": "forceWS","text": ""+("1"==tkn[1])})
+			tkn = tkn.substr(2)
+		}
 		while (tkn.length > 0){
 			tkn = tkn.replace(/^\s*/, ""); // Remove all leading whitespace.
 			var subtkn = tkn.match(match_upto);
@@ -107,9 +111,15 @@ if(!tokens.valid || !tokens.compiled){
 	})
 }
 
-
+var wsStack = [true];
 var matchToken = function(tokenname, str, i, as_prefix){
 	var token = tokens.compiled[tokenname];
+	if(token[0].type=="forceWS"){
+		wsStack.push(token[0].text=="true")
+		token = token.slice(1)
+	}else{
+		wsStack.push(wsStack[wsStack.length-1])
+	}
 	i = (i||0)+1;
 	if(i >= 300)
 		throw new Error("Surpassed Recursion Limit.")
@@ -124,7 +134,8 @@ var matchToken = function(tokenname, str, i, as_prefix){
 			var max_matches = to_match.count[1];
 			var this_match = [];
 			while(max_matches != 0){
-				option_str = option_str.replace(/^(\$\*([^*]|\*[^$])*\*\$|\$[^*\r\n].*|\s)*/,"");
+				if(wsStack[wsStack.length-1])
+					option_str = option_str.replace(/^(\$\*([^*]|\*[^$])*\*\$|\$[^*\r\n].*|\s)*/,"");
 				if(to_match.prefix){
 					if(as_prefix){
 						this_match.push(as_prefix)
@@ -176,14 +187,18 @@ var matchToken = function(tokenname, str, i, as_prefix){
 						}
 					}
 					option_str = shortest.remainder
-					if(shortest == this_tokn)
+					if(shortest == this_tokn){
+						wsStack.splice(wsStack.length-1,1)
 						return shortest
+					}
 					this_tokn = shortest
 				}
 			}
+			wsStack.splice(wsStack.length-1,1)
 			return this_tokn
 		}
 	}
+	wsStack.splice(wsStack.length-1,1)
 }
 // console.log(JSON.stringify(matchToken("program", "a[2] = 3"),null,2))
 

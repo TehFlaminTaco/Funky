@@ -9,11 +9,11 @@ module.exports={
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(x[0-9A-Fa-f]+|b[01]+)|\\d*\\.\\d+(e\\d+)?|\\d+(e\\d+)?)'",
     "stringconstant": " '\"([^\\\\\"]|\\\\(.|[^a]))*\"' | \"'([^\\\\']|\\\\(.|[^a]))*'\" | '\\[(=*)\\[(?:.|[^a])*?\\]\\1\\]' | templatestring",
-    "templatestring": " templatestring_start templatestring_chunk? templatestring_chunks* templatestring_end ",
+    "templatestring": "@0 templatestring_start templatestring_chunk? templatestring_chunks* templatestring_end ",
     "templatestring_start": " '`' ",
     "templatestring_end": " '`' ",
     "templatestring_chunk": " '([^`[\\\\]|\\\\(.|[^a]))*' ",
-    "templatestring_literal": " '\\[' expression '\\]' ",
+    "templatestring_literal": "@1 '\\[' expression '\\]' ",
     "templatestring_chunks": "templatestring_literal templatestring_chunk?",
     "tableconstant": "'\\{' tablefill* '\\}'",
     "tablefill": "var '=' expression ','? | constant '=' expression ','? | expression ','?",
@@ -460,6 +460,15 @@ module.exports={
       ]
     ],
     "templatestring": [
+      {
+        "prefix": false,
+        "count": [
+          0,
+          0
+        ],
+        "type": "forceWS",
+        "text": "false"
+      },
       [
         {
           "prefix": false,
@@ -539,6 +548,15 @@ module.exports={
       ]
     ],
     "templatestring_literal": [
+      {
+        "prefix": false,
+        "count": [
+          0,
+          0
+        ],
+        "type": "forceWS",
+        "text": "true"
+      },
       [
         {
           "prefix": false,
