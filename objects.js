@@ -186,6 +186,22 @@ objects.newEvent = function(scope){
 			t.hooked[i](...arguments);
 		}
 	}
+
+	t.vars._meta = objects.newList()
+	t.vars._meta.vars._call = function(a,...b){
+		return b.vars.call(...a);
+	}
+	t.vars._meta.vars._bitor = (a, b)=>{
+		var bothEvents = objects.newEvent();
+		a.vars.hook(function(...c){
+			bothEvents.vars.call(...c)
+		})
+		b.vars.hook(function(...c){
+			bothEvents.vars.call(...c)
+		})
+		return bothEvents
+	}
+
 	return t;
 }
 

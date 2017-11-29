@@ -257,5 +257,13 @@ module.exports = function(globals){
     */
     globals.nil = undefined;
 
+    /** @constant
+     *  @global
+     *  @type {Event}
+     *  @default loaded
+     *  @name loaded
+     */
+    globals.loaded = objects.newEvent()
+
     return globals;
 }
