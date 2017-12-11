@@ -393,8 +393,8 @@ parse.Function = function(func, scope){
 				vList[i].setter(undefined)
 			}
 			for(var name in arglistScope.vars){
-				tmpScope.vars[name] = arglistScope.vars[name]
-				tmpScope.defined[name] = true;
+				(func.scope || tmpScope).vars[name] = arglistScope.vars[name];
+				(func.scope || tmpScope).defined[name] = true;
 			}
 			if(toDo.name == "block"){
 				var out = parse.Program(toDo, func.scope || tmpScope);
@@ -468,8 +468,8 @@ parse.Function = function(func, scope){
 				vList[i].setter(undefined)
 			}
 			for(var name in arglistScope.vars){
-				tmpScope.vars[name] = arglistScope.vars[name]
-				tmpScope.defined[name] = true;
+				(func.scope || tmpScope).vars[name] = arglistScope.vars[name];
+				(func.scope || tmpScope).defined[name] = true;
 			}
 			if(toDo.name == "block"){
 				var out = parse.Program(toDo, func.scope || tmpScope);

@@ -103,6 +103,7 @@ objects.newList = function(contents){
 	var l = Object.create(null,{});
 	l.vars = Object.create(null,{});
 	l.listeners = [];
+	l.defined = {}; // Redundancy for scope stuff.
 	l.getVar = function(name){
 		// Parent behavoir isn't default, but it _is_ supported.
 		if(l.vars[name]!==undefined)
@@ -167,7 +168,7 @@ objects.newList = function(contents){
 
 	return l;
 }
-
+var storedEvents = [];
 /**
  * An event which can be called or hooked into.
  * @class
@@ -186,6 +187,9 @@ objects.newEvent = function(scope){
 			t.hooked[i](...arguments);
 		}
 	}
+	t.vars.destroy = function(){
+		t.hooked = [];
+	}
 
 	t.vars._meta = objects.newList()
 	t.vars._meta.vars._call = function(a,...b){
@@ -201,8 +205,15 @@ objects.newEvent = function(scope){
 		})
 		return bothEvents
 	}
-
+	storedEvents.push(t);
 	return t;
+}
+
+objects.destroyEvents = ()=>{
+	for(var i=0; i < storedEvents.length; i++){
+		storedEvents[i].hooked = [];
+	}
+	storedEvents = [];
 }
 
 Function.prototype.toString = function(){

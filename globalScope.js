@@ -25,8 +25,8 @@ globals.defaultMeta.vars.string.vars._mod = (a,b)=>{
 		return globals.string.vars.format(a, b)
 	}
 }
-globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"&&typeof(b)=="number"?
-								   globals.string.vars.rep(a,b) :typeof(a)=="number"&&typeof(b)=="string"?
+globals.defaultMeta.vars.string.vars._mult = (a,b)=>typeof(a)=="string"?
+								   globals.string.vars.rep(a,b) :typeof(b)=="string"?
 								   globals.string.vars.rep(b,a) :undefined;
 
 globals.defaultMeta.vars.object = objects.newList();
@@ -35,8 +35,10 @@ globals.defaultMeta.vars.object.vars._index = globals.table;
 globals.defaultMeta.vars.function = objects.newList();
 globals.defaultMeta.vars.number = objects.newList();
 globals.defaultMeta.vars.boolean = objects.newList();
-globals.defaultMeta.vars.undefined = objects.newList();
+globals.defaultMeta.vars.boolean.vars._len = a => a?1:0;
 
+globals.defaultMeta.vars.undefined = objects.newList();
+globals.defaultMeta.vars.undefined.vars._len = a => 0;
 
 var globalsScope = objects.newScope(undefined,true);
 globalsScope.vars = globals;
