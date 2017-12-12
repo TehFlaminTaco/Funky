@@ -193,7 +193,7 @@ objects.newEvent = function(scope){
 
 	t.vars._meta = objects.newList()
 	t.vars._meta.vars._call = function(a,...b){
-		return b.vars.call(...a);
+		return a.vars.call(...a);
 	}
 	t.vars._meta.vars._bitor = (a, b)=>{
 		var bothEvents = objects.newEvent();
