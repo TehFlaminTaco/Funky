@@ -50,6 +50,9 @@ parse.Expression = function(exp, scope){
 	if(typ == "eval"){
 		return parse.Eval(exp, scope);
 	}
+	if(typ == "return"){
+		return parse.Return(exp, scope);
+	}
 	throw new Error("Unknown expression type: "+typ)
 }
 
@@ -82,6 +85,18 @@ parse.Assignment = function(assign, scope, expscope){
 			return v.getter();
 		}
 	}
+}
+
+
+var returnMethod = "";
+var returning = false;
+var retValue = false;
+parse.Return = function(exp, scope){
+	var retOrBreak = exp.data[0].items[0];
+	var valToSend = parse.Expression(exp.data[1].items[0],scope);
+	returning = 1;
+	returnMethod = retOrBreak;
+	retValue = valToSend;
 }
 
 parse.Operator = function(name, l, r){
@@ -531,9 +546,9 @@ parse.Deop = function(expBlock, scope){
 	}
 }
 
-parse.ExpBlock = function(expBlock, scope){
+parse.ExpBlock = function(expBlock, scope,catchbreak){
 	if(expBlock.data[0].name == "block"){
-		return parse.Program(expBlock.data[0].items[0], scope)
+		return parse.Program(expBlock.data[0].items[0], scope, catchbreak)
 	}else{
 		return parse.Expression(expBlock.data[0].items[0], scope)
 	}
@@ -543,8 +558,11 @@ parse.TryBlock = function(expBlock, scope){
 	var toRun = expBlock.data[1].items[0];
 	var out;
 	try{
-		out = parse.ExpBlock(toRun,scope);
+		out = parse.ExpBlock(toRun,scope,true);
 	}catch(e){
+		if(returning){
+			return retValue;
+		}
 		if(expBlock.data[2].count > 0){
 			var catcher = expBlock.data[2].items[0];
 			var catchExp = catcher.data[2].items[0];
@@ -554,7 +572,7 @@ parse.TryBlock = function(expBlock, scope){
 				var arg = catcher.data[1].items[0].data[1].items[0].data[1].items[0]
 				scop.setVar(arg, e.toString());
 			}
-			out = parse.ExpBlock(catchExp, scop);
+			out = parse.ExpBlock(catchExp, scop, true);
 		}
 	}
 	return out;
@@ -570,14 +588,22 @@ parse.ForLoop = function(forloop, scope){
 		if(typeof iter == "object"){
 			for (name in iter.vars){
 				v.setter(name);
-				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope);
+				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope, true);
+				if(returning){
+					returning = 0;
+					return retValue;
+				}
 			}
 			return lastOut
 		}
 		if(typeof iter == "string"){
 			for(var i=0; i < iter.length; i++){
 				v.setter(iter[i]);
-				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope);
+				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope, true);
+				if(returning){
+					returning = 0;
+					return retValue;
+				}
 			}
 			return lastOut;
 		}
@@ -587,7 +613,11 @@ parse.ForLoop = function(forloop, scope){
 
 		while((val = iter(val))!=undefined){
 			v.setter(val);
-			lastOut = parse.ExpBlock(forloop.data[4].items[0], scope);
+			lastOut = parse.ExpBlock(forloop.data[4].items[0], scope, true);
+			if(returning){
+				returning = 0;
+				return retValue;
+			}
 		}
 		return lastOut;
 	}else{
@@ -596,8 +626,11 @@ parse.ForLoop = function(forloop, scope){
 		if(exprs.length >= 1)
 			parse.Expression(exprs[0].data[0].items[0], subScope);
 		while(exprs.length >= 2?parse.Expression(exprs[1].data[0].items[0], subScope):true){
-			lastOut = parse.ExpBlock(todo, subScope);
-
+			lastOut = parse.ExpBlock(todo, subScope, true);
+			if(returning){
+				returning = 0;
+				return retValue;
+			}
 			if(exprs.length >= 3)
 				parse.Expression(exprs[2].data[0].items[0], subScope);
 		}
@@ -623,11 +656,11 @@ parse.IfBlock = function(ifb, scope){
 	var exp = ifb.data[1].items[0];
 	var todo = ifb.data[2].items[0];
 	if(parse.Expression(exp, subScope)){
-		return parse.ExpBlock(todo, scope);
+		return parse.ExpBlock(todo, scope, true);
 	}else{
 		if(ifb.data[3].count > 0){
 			todo = ifb.data[3].items[0].data[1].items[0];
-			return parse.ExpBlock(todo, subScope);
+			return parse.ExpBlock(todo, subScope, true);
 		}
 	}
 }
@@ -647,7 +680,11 @@ parse.WhileBlock = function(ifb, scope){
 	var exp = ifb.data[1].items[0];
 	var todo = ifb.data[2].items[0];
 	while(parse.Expression(exp, subScope)){
-		parse.ExpBlock(todo, scope);
+		parse.ExpBlock(todo, scope, true);
+		if(returning){
+			returning = 0;
+			return retValue;
+		}
 	}
 }
 
@@ -713,7 +750,7 @@ parse.Call = function(call, scope){
 	return toCall;
 }
 
-parse.Program = function(prog, upscope){
+parse.Program = function(prog, upscope, catchBreak){
 	//console.log(JSON.stringify(prog, null, 2))
 	var scope = objects.newScope(upscope || globals);
 	var expressions = prog.data[0].items;
@@ -723,6 +760,13 @@ parse.Program = function(prog, upscope){
 	var returnvalue = undefined;
 	for(var i=0; i < expressions.length; i++){
 		returnvalue = parse.Expression(expressions[i].data[0].items[0], scope);
+		if(returning){
+			
+			if(returnMethod == "return" && !catchBreak){
+				returning = 0;
+			}
+			return retValue;
+		}
 	}
 	return returnvalue;
 }

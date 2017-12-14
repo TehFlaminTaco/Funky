@@ -4,8 +4,9 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "return | tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
+    "return": "'break' expression? | 'return' expression?",
     "constant": "numberconstant | stringconstant | tableconstant",
     "numberconstant": "'-?(0(x[0-9A-Fa-f]+|b[01]+)|\\d*\\.\\d+(e\\d+)?|\\d+(e\\d+)?)'",
     "stringconstant": " '\"([^\\\\\"]|\\\\(.|[^a]))*\"' | \"'([^\\\\']|\\\\(.|[^a]))*'\" | '\\[(=*)\\[(?:.|[^a])*?\\]\\1\\]' | templatestring",
@@ -142,6 +143,17 @@ module.exports={
       ]
     ],
     "expression": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "return"
+        }
+      ],
       [
         {
           "prefix": false,
@@ -358,6 +370,48 @@ module.exports={
           "prefix": false,
           "count": [
             1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        }
+      ]
+    ],
+    "return": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "break"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "return"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
             1
           ],
           "type": "token",
