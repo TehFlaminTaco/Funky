@@ -308,6 +308,11 @@ module.exports = function(globals){
                 return i;
             }
         }
+        for(var i in tab.vars){
+            if(tab.vars[i] == haystack){
+                return i;
+            }
+        }
         return undefined;
     }
 
