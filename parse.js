@@ -97,6 +97,7 @@ parse.Return = function(exp, scope){
 	returning = 1;
 	returnMethod = retOrBreak;
 	retValue = valToSend;
+	return retValue;
 }
 
 parse.Operator = function(name, l, r){
