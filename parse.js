@@ -590,7 +590,7 @@ parse.ForLoop = function(forloop, scope){
 				v.setter(name);
 				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope, true);
 				if(returning){
-					returning = 0;
+					if(returnMethod == "break") returning = 0;
 					return retValue;
 				}
 			}
@@ -601,7 +601,7 @@ parse.ForLoop = function(forloop, scope){
 				v.setter(iter[i]);
 				lastOut = parse.ExpBlock(forloop.data[4].items[0], scope, true);
 				if(returning){
-					returning = 0;
+					if(returnMethod == "break") returning = 0;
 					return retValue;
 				}
 			}
@@ -615,7 +615,7 @@ parse.ForLoop = function(forloop, scope){
 			v.setter(val);
 			lastOut = parse.ExpBlock(forloop.data[4].items[0], scope, true);
 			if(returning){
-				returning = 0;
+				if(returnMethod == "break") returning = 0;
 				return retValue;
 			}
 		}
@@ -628,7 +628,7 @@ parse.ForLoop = function(forloop, scope){
 		while(exprs.length >= 2?parse.Expression(exprs[1].data[0].items[0], subScope):true){
 			lastOut = parse.ExpBlock(todo, subScope, true);
 			if(returning){
-				returning = 0;
+				if(returnMethod == "break") returning = 0;
 				return retValue;
 			}
 			if(exprs.length >= 3)
@@ -682,7 +682,7 @@ parse.WhileBlock = function(ifb, scope){
 	while(parse.Expression(exp, subScope)){
 		parse.ExpBlock(todo, scope, true);
 		if(returning){
-			returning = 0;
+			if(returnMethod == "break") returning = 0;
 			return retValue;
 		}
 	}
