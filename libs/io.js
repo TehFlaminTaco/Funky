@@ -31,11 +31,11 @@ module.exports = function(globals){
      */
     io.read = function(mode=""){
         if(mode=="*n")
-            return reader.read_number();
+            return stdinreader.read_number();
         else if(mode=="*a")
-            return reader.read_until("$a^")
+            return stdinreader.read_until("$a^")
         else
-            return reader.read_line();
+            return stdinreader.read_line();
     }
 
     /**
