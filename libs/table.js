@@ -255,7 +255,9 @@ module.exports = function(globals){
             left = table.sort(left, f);
         if(r_i>1)
             right = table.sort(right, f);
-        return table.add(table.add(left, pivotVal),right)
+        var p = objects.newList();
+        p.vars[0] = pivotVal;
+        return table.add(table.add(left, p),right)
     }
 
     /** @function

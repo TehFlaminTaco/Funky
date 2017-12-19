@@ -91,6 +91,14 @@ module.exports = function(globals){
      */
     math.clamp = (a,b,c)=>[a,b,c].sort()[1]
     /**
+     * Return the absolute value of a number.
+     * @function
+     * @param {number} n
+     * @returns {number} out - The absolute value
+     * @memberof math
+     */
+    math.abs = Math.abs
+    /**
      * Return the log of one or two numbers.
      * @function
      * @param {number} base - The base of the log
