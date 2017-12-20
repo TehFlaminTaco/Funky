@@ -88,6 +88,15 @@ module.exports = function(globals){
      */
     string.gsub = (a,b,c)=>a.replace(new RegExp(b,'g'),c)
     /**
+     * Replace each character in a string with replace.
+     * @function
+     * @memberof string
+     * @param {string} haystack - The string to iterate through.
+     * @param {string|function} - The value to replace with.
+     * @returns {string} replaced - The new modified string.
+     */
+    string.map = (a,b)=>a.replace(/.|[^a]/g,b);
+    /**
      * Determine if a needle matches a haystack, and if it does, return a match object.
      * @function
      * @memberof string
