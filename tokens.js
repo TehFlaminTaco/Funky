@@ -1926,7 +1926,7 @@ module.exports={
             -1
           ],
           "type": "token",
-          "text": "expression"
+          "text": "program_1"
         }
       ],
       [
@@ -1955,7 +1955,7 @@ module.exports={
             -1
           ],
           "type": "token",
-          "text": "expression"
+          "text": "program_1"
         }
       ]
     ],

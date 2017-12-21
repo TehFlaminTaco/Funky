@@ -528,7 +528,7 @@ parse.SwitchBlock = function(block, scope){
 		if(startedHitting){
 			var subScope = objects.newScope(scope);
 			for(var c=0; c < toDo.length; c++){
-				lastOut = parse.Expression(toDo[c],subScope)
+				lastOut = parse.Expression(toDo[c].data[0].items[0],subScope)
 				if(returning){
 					if(returnMethod == "break") returning = 0;
 					return retValue;
