@@ -4,7 +4,7 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "return | tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "switchblock | return | tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "return": "'break' expression? | 'return' expression?",
     "constant": "numberconstant | stringconstant | tableconstant",
@@ -40,6 +40,9 @@ module.exports={
     "ifblock": "'if' expression exporblock elif?",
     "elif": "'else' exporblock",
     "whileblock": "'while' expression exporblock",
+    "switchblock": "'switch' expression cases",
+    "cases": "'{' case* '}' | case*",
+    "case": "':' 'case' expression program_1+ | ':' 'default' program_1+",
     "whenblock": "'when' expression exporblock",
     "ternary": "expression: '\\?' expression elset",
     "elset": "':' expression",
@@ -143,6 +146,17 @@ module.exports={
       ]
     ],
     "expression": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "switchblock"
+        }
+      ],
       [
         {
           "prefix": false,
@@ -1800,6 +1814,148 @@ module.exports={
           ],
           "type": "token",
           "text": "exporblock"
+        }
+      ]
+    ],
+    "switchblock": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "switch"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "cases"
+        }
+      ]
+    ],
+    "cases": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "{"
+        },
+        {
+          "prefix": false,
+          "count": [
+            0,
+            -1
+          ],
+          "type": "token",
+          "text": "case"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "}"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            0,
+            -1
+          ],
+          "type": "token",
+          "text": "case"
+        }
+      ]
+    ],
+    "case": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": ":"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "case"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            -1
+          ],
+          "type": "token",
+          "text": "expression"
+        }
+      ],
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": ":"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "default"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            -1
+          ],
+          "type": "token",
+          "text": "expression"
         }
       ]
     ],

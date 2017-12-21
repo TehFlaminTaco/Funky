@@ -41,6 +41,8 @@ parse.Expression = function(exp, scope){
 		return parse.Ternary(exp, scope);
 	if(typ == "whileblock")
 		return parse.WhileBlock(exp, scope);
+	if(typ == "switchblock")
+		return parse.SwitchBlock(exp, scope);
 	if(typ == "whenblock")
 		return parse.WhenBlock(exp, scope);
 	if(typ == "crementor")
@@ -505,6 +507,42 @@ parse.Function = function(func, scope){
 	}
 }
 
+parse.SwitchBlock = function(block, scope){
+	var val = parse.Expression(block.data[1].items[0],scope);
+	var cases = block.data[2].items[0];
+	cases = cases.data[0].name == '{' ? cases.data[1].items : cases.data[0].items;
+	var startedHitting = false;
+	var lastOut = undefined;
+	for(var i=0; i < cases.length; i++){
+		var cse = cases[i];
+		var typ = cse.data[1].name;
+		var toDo;
+		if(typ=='case'){
+			toDo = cse.data[3].items;
+			if(parse.Operator("eq",val,parse.Expression(cse.data[2].items[0],scope))) // *Screams at this one expression in particular.
+				startedHitting = true;
+		}else{
+			toDo = cse.data[2].items;
+			startedHitting = true;
+		}
+		if(startedHitting){
+			var subScope = objects.newScope(scope);
+			for(var c=0; c < toDo.length; c++){
+				lastOut = parse.Expression(toDo[c],subScope)
+				if(returning){
+					if(returnMethod == "break") returning = 0;
+					return retValue;
+				}
+			}
+		}
+		if(returning){
+			if(returnMethod == "break") returning = 0;
+			return retValue;
+		}
+	}
+	return lastOut;
+}
+
 parse.WhenBlock = function(when, scope){
 	var evnt = parse.Expression(when.data[1].items[0], scope);
 	var todo = function(){
@@ -549,7 +587,8 @@ parse.Deop = function(expBlock, scope){
 
 parse.ExpBlock = function(expBlock, scope,catchbreak){
 	if(expBlock.data[0].name == "block"){
-		return parse.Program(expBlock.data[0].items[0], scope, catchbreak)
+		var subScope = objects.newScope(scope);
+		return parse.Program(expBlock.data[0].items[0], subScope, catchbreak)
 	}else{
 		return parse.Expression(expBlock.data[0].items[0], scope)
 	}
