@@ -1,49 +1,6 @@
 var objects = require("../objects.js");
 var strftime = require("../strftime.js");
 
-function stream(stream_obj){
-    var stream = objects.newList();
-    stream.vars.on = function(d, prehook){
-        var evnt = objects.newEvent();
-        stream_obj.on(d, s=>{
-            if (Buffer.isBuffer(s)){
-                evnt.vars.call(s.toString())
-            }else{
-                evnt.vars.call(s)
-            }
-        });
-        if(prehook){
-            evnt.vars.hook(prehook);
-        }
-        return evnt;
-    }
-    stream.vars.write = function(s){
-        stream_obj.write(s);
-    }
-    stream.vars.end = function(s){
-        stream_obj.end(s);
-    }
-    stream.vars.pipe = function(other){
-        if(other == undefined){
-            return undefined;
-        }else if(other.stream_obj){
-            stream_obj.pipe(other.stream_obj);
-        }else if(other.vars && other.vars.stdin && other.vars.stdin.stream_obj){
-            stream_obj.pipe(other.vars.stdin.stream_obj);
-            return other;
-        }else{
-            stream.vars.on('data', other);
-            return stream;
-        }
-        return other;
-    }
-    stream.stream_obj = stream_obj;
-
-    stream.type = 'Stream';
-
-    return stream;
-}
-
 // Thanks StackOverflow
 // https://stackoverflow.com/a/26426761/7170955
 Date.prototype.isLeapYear = function() {
@@ -118,15 +75,15 @@ module.exports = function(globals){
         var obj = objects.newList();
 
         obj.type = 'Process'
-        obj.vars.stdout = stream(p.stdout)
+        obj.vars.stdout = objects.newStream(p.stdout)
 
-        obj.vars.stderr = stream(p.stderr)
+        obj.vars.stderr = objects.newStream(p.stderr)
 
-        obj.vars.stdin = stream(p.stdin)
+        obj.vars.stdin = objects.newStream(p.stdin)
 
         obj.vars.pipe = (other)=>obj.vars.stdout.vars.pipe(other);
   
-        obj.vars.on = stream(p)
+        obj.vars.on = objects.newStream(p)
 
         return obj;
     }

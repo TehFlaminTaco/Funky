@@ -140,6 +140,18 @@ module.exports = function(globals){
     }
 
     /**
+     * Create a new stream object.
+     * @global
+     * @function
+     * @name newStream
+     * @param {function} [func] - The function to stream through. Defaults to a cat.
+     * @returns {Stream} stream - The new stream.
+     */
+    globals.newStream = function(obj){
+        return objects.newStream(obj || (n=>n));
+    }
+
+    /**
      * Set the parent of one object to another. Undefined keys of an object fall through to its parent.
      * @global
      * @function

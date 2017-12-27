@@ -210,6 +210,116 @@ objects.newEvent = function(scope){
 	return t;
 }
 
+/**
+ * A stream which can be piped to other streamables or functions.
+ * @class
+ * @name Stream
+ * @extends Object
+ */
+objects.newStream = function(stream_obj){
+    if(typeof(stream_obj)=='function'){
+        var stream = objects.newList();
+        stream.hooks = {data: [], close: []};
+        var closed = false;
+        stream.vars.write = function(s){
+            if (!closed){
+                var ret = stream_obj(s);
+                for(var i=0; i < stream.hooks.data.length; i++){
+                    stream.hooks.data[i](ret);
+                }
+                return true;
+            }
+            return false;
+        }
+
+        stream.vars.end = function(s){
+            closed = true;
+            for(var i=0; i < stream.hooks.close.length; i++){
+                stream.hooks.close[i]();
+            }
+            return true;
+        }
+
+        stream.vars.on = function(hook, func){
+            stream.hooks[hook] = stream.hooks[hook]||[];
+            stream.hooks[hook].push(func);
+            return stream;
+        }
+
+        stream.vars.pipe = function(other){
+            if(other == undefined){
+                return undefined;
+            }else if(other.type == 'Stream'){
+                stream.vars.on('data', (s)=>other.vars.write(s))
+                stream.vars.on('close', ()=>other.vars.end())
+                return other;
+            }else if(other.vars && other.vars.stdin && other.vars.stdin.stream_obj){
+                stream.vars.on('data', (s)=>other.vars.stdin.vars.write(s))
+                stream.vars.on('close', ()=>other.vars.stdin.vars.end())
+                return other;
+            }else if(typeof other == 'function'){
+                other = objects.newStream(other);
+                return stream.vars.pipe(other);
+            }else{
+                stream.vars.on('data', other);
+                return stream;
+            }
+            return other;
+        }
+
+        stream.type = 'Stream';
+        return stream;
+    }else{
+        var stream = objects.newList();
+        stream.vars.on = function(d, prehook){
+            var evnt = objects.newEvent();
+            stream_obj.on(d, s=>{
+                if (Buffer.isBuffer(s)){
+                    evnt.vars.call(s.toString())
+                }else{
+                    evnt.vars.call(s)
+                }
+            });
+            if(prehook){
+                evnt.vars.hook(prehook);
+            }
+            return evnt;
+        }
+        stream.vars.write = function(s){
+            stream_obj.write(s);
+        }
+        stream.vars.end = function(s){
+            stream_obj.end(s);
+        }
+        stream.vars.pipe = function(other){
+            if(other == undefined){
+                return undefined;
+            }else if(other.stream_obj){
+                stream_obj.pipe(other.stream_obj);
+            }else if(other.type == 'Stream'){
+                stream.vars.on('data', (s)=>other.vars.write(s))
+                stream.vars.on('close', ()=>other.vars.end())
+                return other;
+            }else if(other.vars && other.vars.stdin && other.vars.stdin.stream_obj){
+                stream_obj.pipe(other.vars.stdin.stream_obj);
+                return other;
+            }else if(typeof other == 'function'){
+                other = objects.newStream(other);
+                return stream.vars.pipe(other);
+            }else{
+                stream.vars.on('data', other);
+                return stream;
+            }
+            return other;
+        }
+        stream.stream_obj = stream_obj;
+
+        stream.type = 'Stream';
+
+        return stream;
+    }
+}
+
 objects.destroyEvents = ()=>{
 	for(var i=0; i < storedEvents.length; i++){
 		storedEvents[i].hooked = [];
