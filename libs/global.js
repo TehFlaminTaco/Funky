@@ -215,6 +215,9 @@ module.exports = function(globals){
      */
     globals.getMetaFunc = function(val, name){
         if(typeof val == "object"){
+            if(val.vars == undefined){
+                return undefined;
+            }
             if(typeof val.vars._meta == "object" && val.vars._meta.vars[name] !== undefined){
                 return val.vars._meta.vars[name];
             }
