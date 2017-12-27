@@ -24,13 +24,16 @@ function stream(stream_obj){
         stream_obj.end(s);
     }
     stream.vars.pipe = function(other){
-        if(other.stream_obj){
+        if(other == undefined){
+            return undefined;
+        }else if(other.stream_obj){
             stream_obj.pipe(other.stream_obj);
         }else if(other.vars && other.vars.stdin && other.vars.stdin.stream_obj){
             stream_obj.pipe(other.vars.stdin.stream_obj);
             return other;
         }else{
-            return stream.vars.on('data', other);
+            stream.vars.on('data', other);
+            return stream;
         }
         return other;
     }
