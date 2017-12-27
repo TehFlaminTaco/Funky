@@ -179,6 +179,7 @@ objects.newEvent = function(scope){
 	var t = objects.newList();
 	t.scope = scope || objects.newScope();
 	t.hooked = [];
+	t.type = 'Event'
 	t.vars.hook = function(func){
 		t.hooked.push(func)
 	}

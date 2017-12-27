@@ -45,7 +45,7 @@ module.exports = function(globals){
     globals.toString = s=>{
         f=globals.getMetaFunc(s, "_toString");
         if(f){
-            if(typeof(f)=="function")
+            if(globals.type(f)=="function")
                 return f(s)
             else
                 return f
@@ -214,17 +214,17 @@ module.exports = function(globals){
      * @returns {function} The metamethod.
      */
     globals.getMetaFunc = function(val, name){
-        if(typeof val == "object"){
+        if(typeof(val) == "object"){
             if(val.vars == undefined){
                 return undefined;
             }
-            if(typeof val.vars._meta == "object" && val.vars._meta.vars[name] !== undefined){
+            if(globals.type(val.vars._meta) == "object" && val.vars._meta.vars[name] !== undefined){
                 return val.vars._meta.vars[name];
             }
         }
 
-        if(typeof globals.defaultMeta == "object" && typeof globals.defaultMeta.vars[typeof val] == "object" && globals.defaultMeta.vars[typeof val].vars[name]!==undefined){
-            return globals.defaultMeta.vars[typeof val].vars[name];	
+        if(typeof globals.defaultMeta == "object" && typeof globals.defaultMeta.vars[globals.type(val)] == "object" && globals.defaultMeta.vars[globals.type(val)].vars[name]!==undefined){
+            return globals.defaultMeta.vars[globals.type(val)].vars[name];	
         }
     }
 
@@ -236,7 +236,13 @@ module.exports = function(globals){
      * @param {*} object - The object to determine the type of.
      * @returns {string} type - The string referring to the type of the input object.
      */
-    globals.type = ent => typeof(ent)
+    globals.type = ent =>{
+        if(typeof(ent)!=='undefined' && ent.type){
+            return ent.type;
+        }else{
+            return typeof ent;
+        }
+    }
 
     /** @constant
         @global
