@@ -11,6 +11,14 @@ module.exports = function(globals){
     var io = ioObj.vars;
     module.exports = ()=>ioObj;
 
+
+    if(process && process.stdin){
+        var t_stdin;
+        var t_stdout;
+        io.stdin = ()=>t_stdin=t_stdin||objects.newStream(process.stdin);
+        io.stdout = ()=>t_stdout=t_stdout||objects.newStream(process.stdout);
+    }
+
     /**
      * @function
      * @memberof io

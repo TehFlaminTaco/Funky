@@ -310,10 +310,12 @@ objects.newStream = function(obj,partner){
 				return evnt;
 			}
 			stream.vars.write = function(s){
-				stream.obj.write(s);
+				try{stream.obj.write(s);}catch(e){}
+				return stream;
 			}
 			stream.vars.end = function(s){
-				stream.obj.end(s);
+				try{stream.obj.end(s);}catch(e){}
+				return stream;
 			}
 		}
 		obj = streamableInterface(stream);
