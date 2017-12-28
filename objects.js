@@ -216,7 +216,7 @@ function streamableInterface(obj){
 	//	 	   write
 	//		   on
 	//		     data
-	//			 close
+	//			 finish
 	//		   end
 	// Provides:
 	// obj
@@ -241,7 +241,7 @@ function streamableInterface(obj){
 			output = other;
 		}
 		obj.vars.on('data', s=>other.vars.write(s));
-		obj.vars.on('close', ()=>other.vars.end());
+		obj.vars.on('finish', ()=>other.vars.end());
 		return objects.newStream(obj, output);
 	}
 	return obj;
@@ -261,7 +261,7 @@ objects.newStream = function(obj,partner){
 	obj = obj || (s=>s);
 	if(globals.vars.type(obj) != "Stream"){
 		if(typeof obj == 'function'){
-			stream.hooks = {data: [], close: []};
+			stream.hooks = {data: [], finish: []};
 			stream.closed = false;
 			stream.func = obj;
 			stream.vars.on = function(d, func){
@@ -285,8 +285,8 @@ objects.newStream = function(obj,partner){
 			}
 			stream.vars.end = function(code){
 				if(!stream.closed){
-					for(var i=0; i < stream.hooks.close.length; i++){
-						stream.hooks.close[i](code);
+					for(var i=0; i < stream.hooks.finish.length; i++){
+						stream.hooks.finish[i](code);
 					}
 					stream.closed = true;
 					return true;
