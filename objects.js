@@ -216,7 +216,7 @@ function streamableInterface(obj){
 	//	 	   write
 	//		   on
 	//		     data
-	//			 finish
+	//			 finish | end | close
 	//		   end
 	// Provides:
 	// obj
@@ -241,6 +241,8 @@ function streamableInterface(obj){
 			output = other;
 		}
 		obj.vars.on('data', s=>other.vars.write(s));
+		obj.vars.on('end', ()=>other.vars.end());
+		obj.vars.on('close', ()=>other.vars.end());
 		obj.vars.on('finish', ()=>other.vars.end());
 		return objects.newStream(obj, output);
 	}
