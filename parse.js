@@ -546,7 +546,7 @@ parse.SwitchBlock = function(block, scope){
 parse.With = function(exp, scope){
 	var obj = parse.Expression(exp.data[1].items[0], scope);
 	if (globals.vars.type(obj)!="object"){
-		var o = objets.newList();
+		var o = objects.newList();
 		o.vars.this = obj;
 		obj = o;
 	}
