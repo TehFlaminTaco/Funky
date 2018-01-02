@@ -49,12 +49,12 @@ parse.Expression = function(exp, scope){
 		return parse.Crementor(exp, scope);
 	if(typ == "is")
 		return parse.IsEvent(exp, scope);
-	if(typ == "eval"){
+	if(typ == "eval")
 		return parse.Eval(exp, scope);
-	}
-	if(typ == "return"){
+	if(typ == "return")
 		return parse.Return(exp, scope);
-	}
+	if(typ == "withblock")
+		return parse.With(exp, scope);
 	throw new Error("Unknown expression type: "+typ)
 }
 
@@ -541,6 +541,18 @@ parse.SwitchBlock = function(block, scope){
 		}
 	}
 	return lastOut;
+}
+
+parse.With = function(exp, scope){
+	var obj = parse.Expression(exp.data[1].items[0], scope);
+	if (globals.vars.type(obj)!="object"){
+		var o = objets.newList();
+		o.vars.this = obj;
+		obj = o;
+	}
+	var newScope = objects.newScope(scope);
+	newScope.vars = obj.vars;
+	return parse.ExpBlock(exp.data[2].items[0], newScope);
 }
 
 parse.WhenBlock = function(when, scope){

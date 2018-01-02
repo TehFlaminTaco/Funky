@@ -4,7 +4,7 @@ module.exports={
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
     "program_1": "expression ';'?",
-    "expression": "switchblock | return | tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
+    "expression": "withblock | switchblock | return | tryblock | forloop | ifblock | whileblock | whenblock | function_builder | eval | ternary | call | deop | arithmatic | unaryarithmatic | assignment | crementor | is | paranexp | constant | var",
     "exporblock": "block | expression",
     "return": "'break' expression? | 'return' expression?",
     "constant": "numberconstant | stringconstant | tableconstant",
@@ -44,6 +44,7 @@ module.exports={
     "cases": "'{' case* '}' | case*",
     "case": "':' 'case' expression program_1+ | ':' 'default' program_1+",
     "whenblock": "'when' expression exporblock",
+    "withblock": "'with' expression exporblock",
     "ternary": "expression: '\\?' expression elset",
     "elset": "':' expression",
     "is": "expression: 'is' '\\*' | expression: 'is' expression",
@@ -146,6 +147,17 @@ module.exports={
       ]
     ],
     "expression": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "withblock"
+        }
+      ],
       [
         {
           "prefix": false,
@@ -1969,6 +1981,37 @@ module.exports={
           ],
           "type": "regex",
           "text": "when"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "exporblock"
+        }
+      ]
+    ],
+    "withblock": [
+      [
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "regex",
+          "text": "with"
         },
         {
           "prefix": false,

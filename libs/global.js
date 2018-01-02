@@ -1,4 +1,5 @@
 const parse = require("../parse.js");
+const tokenizer = require("../tokenizer.js");
 const objects = require("../objects.js");
 module.exports = function(globals){
     module.exports = globals;
@@ -206,6 +207,22 @@ module.exports = function(globals){
     }
 
     /**
+     * Executes a string as Funky Code.
+     * @global
+     * @function
+     * @name exec
+     * @param {string} str - The text to compile and run.
+     * @returns {*} result
+     */
+    globals.exec = function(str){
+        var tkns = tokenizer.compile(str);
+        if(!tkns){
+            return false;
+        }
+        return parse.Program(tkns)
+    }
+
+    /**
      * Throw an error with a giving string as the text.
      * @global
      * @function
@@ -226,7 +243,7 @@ module.exports = function(globals){
      * @returns {function} The metamethod.
      */
     globals.getMetaFunc = function(val, name){
-        if(typeof(val) == "object"){
+        if(val != null && typeof(val) == "object"){
             if(val.vars == undefined){
                 return undefined;
             }
@@ -249,7 +266,7 @@ module.exports = function(globals){
      * @returns {string} type - The string referring to the type of the input object.
      */
     globals.type = ent =>{
-        if(typeof(ent)!=='undefined' && ent.type){
+        if(typeof(ent)!=='undefined' && ent!==null && ent.type){
             return ent.type;
         }else{
             return typeof ent;

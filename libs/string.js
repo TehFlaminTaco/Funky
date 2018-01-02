@@ -104,7 +104,7 @@ module.exports = function(globals){
      * @param {string} needle - The regex to match.
      * @returns {object} matchobject - An object containing the match information or undefined.
      */
-    string.match = (a,b)=>objects.ListFromObject(a.match(new RegExp(b)))
+    string.match = (a,b)=>objects.ListFromObject(a.match(new RegExp(b)))||false;
     /**
      * Build an iterator from a needle and haystack. Each iteration returns the next match.
      * @function
