@@ -1,5 +1,5 @@
 module.exports={
-  "valid": true,
+  "valid": false,
   "raw": {
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
@@ -42,7 +42,7 @@ module.exports={
     "whileblock": "'while' expression exporblock",
     "switchblock": "'switch' expression cases",
     "cases": "'{' case* '}' | case*",
-    "case": "':' 'case' expression program_1+ | ':' 'default' program_1+",
+    "case": "':' 'default' program_1+ | ':' 'case'? expression program_1+",
     "whenblock": "'when' expression exporblock",
     "withblock": "'with' expression exporblock",
     "ternary": "expression: '\\?' expression elset",
