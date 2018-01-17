@@ -1,5 +1,5 @@
 module.exports={
-  "valid": false,
+  "valid": true,
   "raw": {
     "program": "program_1+",
     "block": "'\\{' program_1* '\\}'",
@@ -1920,16 +1920,7 @@ module.exports={
             1
           ],
           "type": "regex",
-          "text": "case"
-        },
-        {
-          "prefix": false,
-          "count": [
-            1,
-            1
-          ],
-          "type": "token",
-          "text": "expression"
+          "text": "default"
         },
         {
           "prefix": false,
@@ -1954,11 +1945,20 @@ module.exports={
         {
           "prefix": false,
           "count": [
-            1,
+            0,
             1
           ],
           "type": "regex",
-          "text": "default"
+          "text": "case"
+        },
+        {
+          "prefix": false,
+          "count": [
+            1,
+            1
+          ],
+          "type": "token",
+          "text": "expression"
         },
         {
           "prefix": false,
